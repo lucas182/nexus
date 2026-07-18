@@ -127,3 +127,29 @@ export const KNOWLEDGE_TYPE_LABELS: Record<KnowledgeType, string> = {
   pattern: "Padrão Identificado",
   validatedHypothesis: "Hipótese Validada",
 };
+
+// Sprint 2.5 — Observabilidade e Memória Comportamental (ver ../../SPRINT_2_5.md).
+// Observation nunca é criada pelo usuário — apenas pelo sistema, via logObservation().
+export type ObservationType =
+  | "workspace_opened"
+  | "thread_opened"
+  | "knowledge_viewed"
+  | "insight_requested"
+  | "capture_created"
+  | "search_performed"
+  | "inbox_item_classified"
+  | "event_created"
+  | "knowledge_consolidated"
+  | "thread_status_changed"
+  | "thread_archived";
+
+export interface Observation {
+  id: string;
+  user_id: string;
+  type: ObservationType;
+  workspace_id: string | null;
+  thread_id: string | null;
+  entity_id: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+}
