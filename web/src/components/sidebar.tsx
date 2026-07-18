@@ -2,14 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox, Radar, Plus, Search } from "lucide-react";
+import { Inbox, Radar, Plus, Search, Flame, LogOut } from "lucide-react";
 
 import type { Workspace } from "@/types/domain";
 import { WorkspaceIcon } from "@/lib/icon-map";
+import { logout } from "@/lib/actions/auth";
+import { WorkspaceRowMenu } from "@/components/workspace-row-menu";
 
 export function Sidebar({
   workspaces,
   inboxCount,
+  mostActiveWorkspaceId = null,
+  userEmail = null,
   onCaptureClick,
   onSearchClick,
   mobileOpen,
@@ -17,6 +21,8 @@ export function Sidebar({
 }: {
   workspaces: Workspace[];
   inboxCount: number;
+  mostActiveWorkspaceId?: string | null;
+  userEmail?: string | null;
   onCaptureClick: () => void;
   onSearchClick: () => void;
   mobileOpen: boolean;
@@ -88,28 +94,48 @@ export function Sidebar({
               href="/workspace/new"
               onClick={onMobileClose}
               title="Novo Workspace"
-              className="text-text-tertiary hover:text-accent"
+              className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border transition-colors ${
+                workspaces.length === 0
+                  ? "border-accent-muted bg-accent-soft text-accent"
+                  : "border-transparent text-text-tertiary hover:border-border-light hover:bg-hover hover:text-text-primary"
+              }`}
             >
               <Plus size={13} />
             </Link>
           </div>
-          {workspaces.map((ws) => {
-            const active = pathname === `/workspace/${ws.id}`;
-            return (
-              <Link
-                key={ws.id}
-                href={`/workspace/${ws.id}`}
-                onClick={onMobileClose}
-                className={navItemClass(active)}
-              >
-                <WorkspaceIcon slug={ws.icon} size={18} strokeWidth={1.5} />
-                <span>{ws.name}</span>
-              </Link>
-            );
-          })}
+          {workspaces.length === 0 ? (
+            <div className="mx-1 rounded-md border border-dashed border-border-light px-3 py-3 text-center">
+              <p className="text-xs text-text-tertiary">Nenhum workspace ainda</p>
+            </div>
+          ) : (
+            workspaces.map((ws) => {
+              const active = pathname === `/workspace/${ws.id}`;
+              return (
+                <div key={ws.id} className="group relative">
+                  <Link
+                    href={`/workspace/${ws.id}`}
+                    onClick={onMobileClose}
+                    className={navItemClass(active)}
+                  >
+                    <WorkspaceIcon slug={ws.icon} size={18} strokeWidth={1.5} />
+                    <span className="flex-1 truncate">{ws.name}</span>
+                    {ws.id === mostActiveWorkspaceId && (
+                      <span className="flex-shrink-0" title="Workspace mais ativo esta semana">
+                        <Flame size={12} className="text-accent" />
+                      </span>
+                    )}
+                    <span className="w-5 flex-shrink-0" />
+                  </Link>
+                  <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
+                    <WorkspaceRowMenu workspaceId={ws.id} workspaceName={ws.name} />
+                  </div>
+                </div>
+              );
+            })
+          )}
         </nav>
 
-        <div className="mt-auto p-2">
+        <div className="mt-auto flex flex-col gap-1 p-2">
           <button
             onClick={onSearchClick}
             className="flex w-full items-center gap-2 rounded-md border border-border-light px-3 py-2 text-sm text-text-tertiary hover:bg-hover"
@@ -120,6 +146,23 @@ export function Sidebar({
               Ctrl K
             </kbd>
           </button>
+
+          {userEmail && (
+            <div className="flex items-center gap-2 rounded-md px-3 py-1.5">
+              <span className="min-w-0 flex-1 truncate text-xs text-text-tertiary" title={userEmail}>
+                {userEmail}
+              </span>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  title="Sair"
+                  className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-hover hover:text-text-primary"
+                >
+                  <LogOut size={13} strokeWidth={1.5} />
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </aside>
     </>

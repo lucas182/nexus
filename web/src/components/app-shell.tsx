@@ -10,10 +10,14 @@ import { GlobalSearchModal } from "@/components/global-search-modal";
 export function AppShell({
   workspaces,
   inboxCount,
+  mostActiveWorkspaceId = null,
+  userEmail = null,
   children,
 }: {
   workspaces: Workspace[];
   inboxCount: number;
+  mostActiveWorkspaceId?: string | null;
+  userEmail?: string | null;
   children: React.ReactNode;
 }) {
   const [captureOpen, setCaptureOpen] = useState(false);
@@ -48,6 +52,8 @@ export function AppShell({
       <Sidebar
         workspaces={workspaces}
         inboxCount={inboxCount}
+        mostActiveWorkspaceId={mostActiveWorkspaceId}
+        userEmail={userEmail}
         onCaptureClick={() => setCaptureOpen(true)}
         onSearchClick={() => setSearchOpen(true)}
         mobileOpen={mobileNavOpen}

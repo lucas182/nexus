@@ -24,7 +24,28 @@ export async function createWorkspace(formData: FormData) {
   if (error) throw error;
 
   revalidatePath("/", "layout");
-  redirect(`/workspace/${data.id}`);
+  redirect(`/workspace/${data.id}?created=1`);
+}
+
+export async function deleteWorkspace(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { error } = await supabase
+    .from("workspaces")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
+  if (error) throw error;
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 
 export async function updateWorkspaceContext(formData: FormData) {

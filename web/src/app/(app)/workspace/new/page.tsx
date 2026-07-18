@@ -1,39 +1,31 @@
-import { createWorkspace } from "@/lib/actions/workspaces";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
+import { NewWorkspaceForm } from "@/components/new-workspace-form";
 
 export default function NewWorkspacePage() {
   return (
-    <div className="mx-auto max-w-md">
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight text-text-primary">
-        Novo Workspace
-      </h1>
-      <form action={createWorkspace} className="flex flex-col gap-3">
-        <input
-          name="name"
-          placeholder="Nome (ex: Casa, Tríade.fit, Escola)"
-          required
-          className="rounded-md border border-border px-3 py-2 text-sm text-text-primary outline-none focus:border-accent"
-        />
-        <select
-          name="icon"
-          defaultValue="home"
-          className="rounded-md border border-border px-3 py-2 text-sm text-text-secondary"
-        >
-          <option value="home">🏠 Home</option>
-          <option value="zap">⚡ Zap</option>
-          <option value="book">📖 Livro</option>
-        </select>
-        <textarea
-          name="description"
-          placeholder="Descrição curta"
-          className="h-20 resize-none rounded-md border border-border px-3 py-2 text-sm text-text-primary outline-none focus:border-accent"
-        />
-        <button
-          type="submit"
-          className="mt-1 rounded-md bg-accent px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
-        >
-          Criar Workspace
-        </button>
-      </form>
+    <div className="mx-auto max-w-lg">
+      <Link
+        href="/"
+        className="mb-6 inline-flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-primary"
+      >
+        <ArrowLeft size={13} />
+        Voltar
+      </Link>
+
+      <div className="rounded-lg border border-border-light bg-surface p-8 shadow-sm">
+        <h1 className="mb-1.5 text-2xl font-semibold tracking-tight text-text-primary">
+          Novo Workspace
+        </h1>
+        <p className="mb-7 text-sm text-text-secondary">
+          Um Workspace representa uma área importante da sua vida — um projeto, sua casa, os
+          estudos, um negócio. Você registra ideias, decisões e acontecimentos dentro dele, e o
+          Nexus lembra por você.
+        </p>
+
+        <NewWorkspaceForm />
+      </div>
     </div>
   );
 }

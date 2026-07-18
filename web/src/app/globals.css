@@ -18,6 +18,7 @@
   --accent-hover: #5A4BD6;
   --accent-soft: #F0EEFF;
   --accent-muted: #E0DDFF;
+  --accent-foreground: #FFFFFF;
 
   --hover: #F7F7F7;
   --active: #F0F0F0;
@@ -61,6 +62,7 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-accent-muted: var(--accent-muted);
+  --color-accent-foreground: var(--accent-foreground);
 
   --color-hover: var(--hover);
   --color-active: var(--active);
@@ -100,4 +102,41 @@
 body {
   background: var(--bg);
   color: var(--text-primary);
+}
+
+@keyframes field-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-field-in {
+  animation: field-in 0.28s ease-out backwards;
+}
+
+.animate-toast-in {
+  animation: toast-in 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-field-in,
+  .animate-toast-in {
+    animation: none;
+  }
 }
