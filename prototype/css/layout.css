@@ -1,0 +1,217 @@
+/* ═══════════════════════════════════════════
+   Nexus — Layout
+   Sidebar + Main Content Shell
+   ═══════════════════════════════════════════ */
+
+/* ─── App Shell ─── */
+body {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg); /* Integrated background */
+  border-right: 1px solid rgba(0, 0, 0, 0.04); /* Almost invisible border */
+  padding: var(--space-8) 0;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar-header {
+  padding: 0 var(--space-5);
+  margin-bottom: var(--space-10); /* More vertical space */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  user-select: none;
+}
+
+.logo-text {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  opacity: 0.9;
+}
+
+.logo-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* ─── Sidebar Navigation ─── */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--space-4);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm); /* Slightly smaller/cleaner */
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  user-select: none;
+  margin-bottom: var(--space-1);
+}
+
+.nav-item:hover {
+  background: var(--hover);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--surface); /* Surface cards instead of soft-accent */
+  box-shadow: var(--shadow-xs);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-item svg {
+  flex-shrink: 0;
+  opacity: 0.45;
+  transition: opacity var(--transition-fast);
+}
+
+.nav-item.active svg {
+  opacity: 0.9;
+  color: var(--accent); /* Only color the active icon with accent */
+}
+
+/* ─── Sidebar Section ─── */
+.nav-section {
+  margin-top: var(--space-8);
+}
+
+.nav-section-label {
+  display: block;
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+/* ─── Sidebar Workspace Items ─── */
+.nav-workspace {
+  padding-left: var(--space-3);
+}
+
+.workspace-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--text-tertiary);
+  opacity: 0.4;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.nav-workspace:hover .workspace-dot {
+  opacity: 0.8;
+  background: var(--text-secondary);
+}
+
+.nav-workspace.active .workspace-dot {
+  opacity: 1;
+  background: var(--accent);
+}
+
+/* ─── Sidebar Footer ─── */
+.sidebar-footer {
+  padding: 0 var(--space-4);
+  border-top: none; /* Removed border */
+  margin-top: auto;
+}
+
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.search-trigger:hover {
+  background: var(--hover);
+  color: var(--text-secondary);
+}
+
+.search-trigger svg {
+  flex-shrink: 0;
+}
+
+.search-trigger span {
+  flex: 1;
+  text-align: left;
+}
+
+.search-trigger kbd {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--hover);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  line-height: 1;
+}
+
+/* ─── Main Content ─── */
+.main-content {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg);
+}
+
+#page-content {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-10);
+  min-height: 100%;
+}
+
+/* ─── Page Transitions ─── */
+.page {
+  animation: pageEnter var(--transition-slow) ease forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

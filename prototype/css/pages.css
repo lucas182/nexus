@@ -1,0 +1,136 @@
+/* ═══════════════════════════════════════════
+   Nexus — Page-specific Styles
+   ═══════════════════════════════════════════ */
+
+/* ─── Dashboard ─── */
+.page-header {
+  margin-bottom: var(--space-10);
+}
+
+.greeting h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-1);
+}
+
+.greeting-date {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+/* Dashboard grid: 2 columns for bottom sections */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+}
+
+.dashboard-full {
+  grid-column: 1 / -1;
+}
+
+/* ─── Workspace Page ─── */
+.workspace-header {
+  margin-bottom: var(--space-8);
+}
+
+.workspace-header h1 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-2);
+}
+
+.workspace-header-description {
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+.workspace-header-count {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+}
+
+.records-list {
+  border-top: 1px solid var(--border-light);
+}
+
+.records-list .record-item {
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* ─── Record Page ─── */
+.record-header {
+  margin-bottom: var(--space-8);
+}
+
+.record-badge-wrapper {
+  margin-bottom: var(--space-4);
+}
+
+.record-title-large {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+.record-dates {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.record-body {
+  margin-bottom: var(--space-10);
+}
+
+.record-description {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: 560px;
+}
+
+.record-section {
+  margin-bottom: var(--space-10);
+}
+
+.record-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.record-section-title svg {
+  opacity: 0.5;
+}
+
+.record-section-count {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-tertiary);
+  opacity: 0.6;
+}
+
+/* ─── Empty state ─── */
+.empty-state {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
