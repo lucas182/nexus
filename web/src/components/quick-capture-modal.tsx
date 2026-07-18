@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Link2 } from "lucide-react";
 import { captureToInbox } from "@/lib/actions/inbox";
 
 export function QuickCaptureModal({
@@ -48,6 +49,14 @@ export function QuickCaptureModal({
               if (e.key === "Escape") onClose();
             }}
           />
+          <div className="flex items-center gap-1.5 border-t border-border-light pt-2">
+            <Link2 size={13} className="flex-shrink-0 text-text-tertiary" />
+            <input
+              name="attachment_url"
+              placeholder="Colar um link (opcional)"
+              className="w-full bg-transparent text-xs text-text-secondary outline-none placeholder:text-text-tertiary"
+            />
+          </div>
           <div className="mt-2 flex items-center justify-between border-t border-border-light pt-3">
             <span className="text-xs text-text-tertiary">
               Pressione{" "}

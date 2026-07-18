@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getInboxCount } from "@/lib/data/inbox";
 import { getRecentEventsWithContext } from "@/lib/data/events";
 import { getWorkspaces } from "@/lib/data/workspaces";
+import { getStalledThreads, getInboxOverloadCount, daysSince } from "@/lib/data/insights";
 import { RadarSection } from "@/components/radar-section";
 import { EventTypeBadge } from "@/components/badges";
 
@@ -15,11 +16,14 @@ function formatDateTime(dateStr: string) {
 }
 
 export default async function RadarPage() {
-  const [inboxCount, recentEvents, workspaces] = await Promise.all([
-    getInboxCount(),
-    getRecentEventsWithContext(8),
-    getWorkspaces(),
-  ]);
+  const [inboxCount, recentEvents, workspaces, stalledThreads, inboxOverloadCount] =
+    await Promise.all([
+      getInboxCount(),
+      getRecentEventsWithContext(8),
+      getWorkspaces(),
+      getStalledThreads(),
+      getInboxOverloadCount(),
+    ]);
 
   const highImpactRecent = recentEvents.filter((e) => e.impact === "high");
   const nextSteps = workspaces.filter((w) => w.context_proximo_passo);
@@ -33,6 +37,17 @@ export default async function RadarPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* 1. Onde devo prestar atenção? */}
         <RadarSection title="Onde devo prestar atenção?">
+          {inboxOverloadCount > 0 && (
+            <Link
+              href="/inbox"
+              className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 hover:bg-red-100"
+            >
+              {inboxOverloadCount}{" "}
+              {inboxOverloadCount === 1
+                ? "item parado no Inbox há mais de 48h"
+                : "itens parados no Inbox há mais de 48h"}
+            </Link>
+          )}
           {inboxCount > 0 ? (
             <Link
               href="/inbox"
@@ -70,9 +85,24 @@ export default async function RadarPage() {
 
         {/* 3. O que está parado? */}
         <RadarSection title="O que está parado?">
-          <p className="text-sm text-text-tertiary">
-            A regra de inatividade (Threads sem Event há N dias) chega no Sprint 2.
-          </p>
+          {stalledThreads.length === 0 ? (
+            <p className="text-sm text-text-tertiary">
+              Nenhuma Thread parada. Tudo em andamento.
+            </p>
+          ) : (
+            stalledThreads.map((t) => (
+              <Link
+                key={t.id}
+                href={`/thread/${t.id}`}
+                className="flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-hover"
+              >
+                <span className="flex-1 text-text-primary">{t.title}</span>
+                <span className="flex-shrink-0 text-xs text-text-tertiary">
+                  {daysSince(t.updated_at)}d parada · {t.workspace_name}
+                </span>
+              </Link>
+            ))
+          )}
         </RadarSection>
 
         {/* 4. Qual deveria ser meu próximo passo? */}

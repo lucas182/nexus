@@ -5,9 +5,9 @@ import { getWorkspace } from "@/lib/data/workspaces";
 import { getEventsByThread } from "@/lib/data/events";
 import { getKnowledgeByThread } from "@/lib/data/knowledge";
 import { ThreadDetailsPanel } from "@/components/thread-details-panel";
-import { EventItem } from "@/components/event-item";
 import { NewEventForm } from "@/components/new-event-form";
 import { KnowledgeTypeBadge } from "@/components/badges";
+import { KnowledgeConsolidator } from "@/components/knowledge-consolidator";
 
 export default async function ThreadPage({
   params,
@@ -67,13 +67,7 @@ export default async function ThreadPage({
       <div>
         <h2 className="mb-2 text-sm font-semibold text-text-primary">Timeline de Acontecimentos</h2>
         <div className="rounded-lg border border-border-light bg-surface px-4">
-          {events.length === 0 ? (
-            <p className="py-6 text-center text-sm text-text-tertiary">
-              Nenhum acontecimento registrado ainda.
-            </p>
-          ) : (
-            events.map((event) => <EventItem key={event.id} event={event} />)
-          )}
+          <KnowledgeConsolidator threadId={thread.id} events={events} />
         </div>
         <NewEventForm threadId={thread.id} workspaceId={workspace.id} />
       </div>

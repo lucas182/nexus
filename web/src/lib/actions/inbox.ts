@@ -6,6 +6,7 @@ import { suggestClassification } from "@/lib/heuristics";
 
 export async function captureToInbox(formData: FormData) {
   const rawText = String(formData.get("raw_text") ?? "").trim();
+  const attachmentUrl = String(formData.get("attachment_url") ?? "").trim();
   if (!rawText) return;
 
   const supabase = await createClient();
@@ -19,6 +20,7 @@ export async function captureToInbox(formData: FormData) {
   const { error } = await supabase.from("inbox_items").insert({
     user_id: user.id,
     raw_text: rawText,
+    attachment_url: attachmentUrl || null,
     suggested_workspace_id: suggestion.workspaceId,
     suggested_thread_id: suggestion.threadId,
   });
@@ -37,11 +39,22 @@ export async function classifyInboxItem(formData: FormData) {
 
   const supabase = await createClient();
 
+  const { data: inboxItem } = await supabase
+    .from("inbox_items")
+    .select("attachment_url")
+    .eq("id", inboxItemId)
+    .maybeSingle();
+
+  const metadata = inboxItem?.attachment_url
+    ? { attachment_url: inboxItem.attachment_url }
+    : {};
+
   const { error: eventError } = await supabase.from("events").insert({
     thread_id: threadId,
     type: eventType,
     description,
     impact,
+    metadata,
   });
   if (eventError) throw eventError;
 

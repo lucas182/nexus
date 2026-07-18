@@ -1,3 +1,4 @@
+import { Link2 } from "lucide-react";
 import type { Event } from "@/types/domain";
 import { EventTypeBadge, ImpactLabel } from "@/components/badges";
 
@@ -11,6 +12,9 @@ function formatDateTime(dateStr: string) {
 }
 
 export function EventItem({ event }: { event: Event }) {
+  const attachmentUrl =
+    typeof event.metadata?.attachment_url === "string" ? event.metadata.attachment_url : null;
+
   return (
     <div className="flex gap-3 border-b border-border-light py-3 last:border-0">
       <div className="mt-0.5">
@@ -25,6 +29,17 @@ export function EventItem({ event }: { event: Event }) {
             Impacto: <ImpactLabel impact={event.impact} />
           </span>
         </div>
+        {attachmentUrl && (
+          <a
+            href={attachmentUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 flex items-center gap-1.5 text-xs text-accent hover:underline"
+          >
+            <Link2 size={12} />
+            <span className="truncate">{attachmentUrl}</span>
+          </a>
+        )}
       </div>
     </div>
   );

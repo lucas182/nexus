@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Link2 } from "lucide-react";
 import type { InboxItem, Thread, Workspace, EventType, ImpactLevel } from "@/types/domain";
 import { classifyInboxItem, discardInboxItem } from "@/lib/actions/inbox";
 import { EVENT_TYPE_LABELS } from "@/types/domain";
@@ -48,6 +49,18 @@ export function InboxCard({
   return (
     <div className="mb-4 rounded-lg border border-border-light bg-surface p-4">
       <div className="text-sm leading-relaxed text-text-primary">{item.raw_text}</div>
+
+      {item.attachment_url && (
+        <a
+          href={item.attachment_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 flex items-center gap-1.5 text-xs text-accent hover:underline"
+        >
+          <Link2 size={12} />
+          <span className="truncate">{item.attachment_url}</span>
+        </a>
+      )}
 
       {suggestedWorkspace && suggestedThread && (
         <div className="mt-3 flex items-center justify-between rounded-md border border-border bg-bg px-3 py-2 text-xs">

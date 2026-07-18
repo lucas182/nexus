@@ -1,8 +1,10 @@
-# Nexus — Web (Sprint 1)
+# Nexus — Web (Sprint 1 + 2)
 
 Next.js (App Router) + Supabase implementation of the Nexus MVP described in
 [`../MVP_BLUEPRINT.md`](../MVP_BLUEPRINT.md) and [`../DOMAIN.md`](../DOMAIN.md).
 The original UX prototype lives in [`../prototype`](../prototype).
+
+Live at **https://nexuslife360.vercel.app**.
 
 ## Setup
 
@@ -12,9 +14,9 @@ The original UX prototype lives in [`../prototype`](../prototype).
    ```bash
    cp .env.local.example .env.local
    ```
-3. **Run the migration** in `supabase/migrations/00000000000001_initial_schema.sql`
-   against your project — either paste it into the Supabase SQL Editor, or, if
-   you have the Supabase CLI linked to the project:
+3. **Run the migrations** in `supabase/migrations/` against your project, in
+   order — either paste them into the Supabase SQL Editor, or, if you have the
+   Supabase CLI linked to the project:
    ```bash
    npx supabase db push
    ```
@@ -26,28 +28,41 @@ The original UX prototype lives in [`../prototype`](../prototype).
 5. Open [http://localhost:3000](http://localhost:3000) — you'll be redirected
    to `/signup` since there's no session yet.
 
-## What's implemented (Sprint 1)
+## What's implemented
 
-- Auth (Supabase email/password, session refresh via middleware)
-- Quick Capture (global `+` shortcut) → `inbox_items`
+**Sprint 1** — the core flow (Capture → Inbox → classify → Event → Radar):
+- Auth (Supabase email/password, session refresh via proxy)
+- Quick Capture (global `+` shortcut, optional link attachment) → `inbox_items`
 - Inbox: listing, heuristic suggestion (keyword match / last-used thread —
   **not AI**, see `src/lib/heuristics.ts`), manual classification into an
   Event, discard
 - Workspace: CRUD, editable context panel, Threads list
 - Thread: its own route (`/thread/[id]`), editable objetivo/resumo vivo,
   status lifecycle, Event timeline, manual Event creation
-- Radar (`/`) answering the 4 questions from `MVP_BLUEPRINT.md` §8 with real
-  data — except "o que está parado?", which needs the stalled-thread rule
-  from Sprint 2
 
-## Deliberately not in this Sprint
+**Sprint 2** — intelligence and polish:
+- Deterministic Insights: stalled Thread (no Event in 7 days), Inbox overload
+  (pending 48h+) — see `src/lib/data/insights.ts`. Surfaced on Radar and on
+  Workspace via `InsightChip`
+- Manual Knowledge consolidation: select Events on a Thread and consolidate
+  them into a Knowledge record
+- Global Search (`Ctrl+K`) across Workspaces, Threads, Events, and Knowledge
+  (`ILIKE`-based, `src/app/api/search/route.ts`)
+- Mobile-responsive shell (collapsible Sidebar drawer below the `md` breakpoint)
 
-Per `MVP_BLUEPRINT.md` §14, these are Sprint 2: deterministic Insights
-(stalled thread / inbox 48h+ rules), manual Knowledge consolidation, Global
-Search (Ctrl+K, full-text), attachments, empty-state polish.
+Radar now answers all 4 questions from `MVP_BLUEPRINT.md` §8 with real, live-computed data.
+
+## Deliberately out of scope
+
+Per `MVP_BLUEPRINT.md` §15 (Sprint 3): LLM-assisted classification, automatic
+thread/workspace summarization, semantic insights (contradiction/dependency
+detection), Requested Insights on demand.
 
 ## Deploying
 
-Not deployed yet. When ready: push this repo to GitHub, import it into
-Vercel, and set the same env vars from `.env.local` in the Vercel project
-settings.
+Connected to Vercel, auto-deploys on push to `main`. Project env vars
+(`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_SITE_URL`) are set in the Vercel project's Production
+environment. The Supabase project's Auth → URL Configuration must list the
+production URL's `/auth/callback` as a Redirect URL for email confirmation to
+work there.

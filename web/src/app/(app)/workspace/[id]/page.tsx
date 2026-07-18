@@ -6,6 +6,8 @@ import { WorkspaceContextPanel } from "@/components/workspace-context-panel";
 import { ThreadCard } from "@/components/thread-card";
 import { NewThreadForm } from "@/components/new-thread-form";
 import { WorkspaceIcon } from "@/lib/icon-map";
+import { getStalledThreads, daysSince } from "@/lib/data/insights";
+import { InsightChip } from "@/components/insight-chip";
 
 export default async function WorkspacePage({
   params,
@@ -23,6 +25,8 @@ export default async function WorkspacePage({
       events: await getEventsByThread(thread.id),
     })),
   );
+
+  const stalledThreads = (await getStalledThreads()).filter((t) => t.workspace_id === id);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -43,6 +47,17 @@ export default async function WorkspacePage({
       <div className="mb-8">
         <WorkspaceContextPanel workspace={workspace} />
       </div>
+
+      {stalledThreads.length > 0 && (
+        <div className="mb-8 flex flex-col gap-2">
+          {stalledThreads.map((t) => (
+            <InsightChip key={t.id}>
+              A Thread <strong>{t.title}</strong> está sem novos acontecimentos há{" "}
+              {daysSince(t.updated_at)} dias.
+            </InsightChip>
+          ))}
+        </div>
+      )}
 
       <div>
         <div className="mb-3 flex items-center justify-between">

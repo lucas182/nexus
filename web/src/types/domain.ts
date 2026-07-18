@@ -6,6 +6,7 @@ export interface InboxItem {
   id: string;
   user_id: string;
   raw_text: string;
+  attachment_url: string | null;
   suggested_workspace_id: string | null;
   suggested_thread_id: string | null;
   status: InboxStatus;
