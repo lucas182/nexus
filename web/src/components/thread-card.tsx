@@ -1,12 +1,21 @@
 import Link from "next/link";
 import type { Event, Thread } from "@/types/domain";
 import { ThreadStatusBadge } from "@/components/badges";
+import { ThreadActivityMeter } from "@/components/thread-activity-meter";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 }
 
-export function ThreadCard({ thread, recentEvents }: { thread: Thread; recentEvents: Event[] }) {
+export function ThreadCard({
+  thread,
+  recentEvents,
+  lastObservedAt,
+}: {
+  thread: Thread;
+  recentEvents: Event[];
+  lastObservedAt?: string | null;
+}) {
   return (
     <Link
       href={`/thread/${thread.id}`}
@@ -30,6 +39,12 @@ export function ThreadCard({ thread, recentEvents }: { thread: Thread; recentEve
         </div>
       ) : (
         <div className="mt-2 text-xs text-text-tertiary">Sem acontecimentos registrados</div>
+      )}
+
+      {lastObservedAt !== undefined && (
+        <div className="mt-2 border-t border-border-light pt-2">
+          <ThreadActivityMeter lastObservedAt={lastObservedAt} />
+        </div>
       )}
     </Link>
   );
