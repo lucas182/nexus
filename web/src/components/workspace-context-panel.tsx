@@ -26,7 +26,7 @@ export function WorkspaceContextPanel({ workspace }: { workspace: Workspace }) {
             Editar
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
           <div>
             <div className="text-xs text-text-tertiary">Status Atual</div>
             <div className="mt-0.5 text-text-primary">
@@ -51,7 +51,7 @@ export function WorkspaceContextPanel({ workspace }: { workspace: Workspace }) {
               {workspace.context_decisao_recente || "—"}
             </div>
           </div>
-          <div className="col-span-2 border-t border-border-light pt-3">
+          <div className="col-span-1 border-t border-border-light pt-3 sm:col-span-2">
             <div className="text-xs text-text-tertiary">Próximo Passo Sugerido</div>
             <div className="mt-0.5 font-medium text-text-primary">
               {workspace.context_proximo_passo || "—"}

@@ -28,7 +28,7 @@ export function QuickCaptureModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-32">
+    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-20 sm:pt-32">
       <div className="absolute inset-0 bg-black/20" onClick={onClose} />
       <div className="relative w-full max-w-md rounded-lg border border-border-light bg-surface p-5 shadow-xl">
         <h3 className="mb-3 text-xs font-medium uppercase tracking-wide text-text-tertiary">
