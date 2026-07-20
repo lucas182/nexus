@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox, Radar, Plus, Search, Flame, LogOut } from "lucide-react";
+import { Inbox, Radar, Plus, Search, LogOut } from "lucide-react";
 
 import type { Workspace } from "@/types/domain";
 import { WorkspaceIcon } from "@/lib/icon-map";
@@ -12,7 +12,6 @@ import { WorkspaceRowMenu } from "@/components/workspace-row-menu";
 export function Sidebar({
   workspaces,
   inboxCount,
-  mostActiveWorkspaceId = null,
   userEmail = null,
   onCaptureClick,
   onSearchClick,
@@ -21,7 +20,6 @@ export function Sidebar({
 }: {
   workspaces: Workspace[];
   inboxCount: number;
-  mostActiveWorkspaceId?: string | null;
   userEmail?: string | null;
   onCaptureClick: () => void;
   onSearchClick: () => void;
@@ -119,11 +117,6 @@ export function Sidebar({
                   >
                     <WorkspaceIcon slug={ws.icon} size={18} strokeWidth={1.5} />
                     <span className="flex-1 truncate">{ws.name}</span>
-                    {ws.id === mostActiveWorkspaceId && (
-                      <span className="flex-shrink-0" title="Workspace mais ativo esta semana">
-                        <Flame size={12} className="text-accent" />
-                      </span>
-                    )}
                     <span className="w-5 flex-shrink-0" />
                   </Link>
                   <div className="absolute right-1.5 top-1/2 -translate-y-1/2">

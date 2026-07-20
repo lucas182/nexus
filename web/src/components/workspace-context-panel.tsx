@@ -2,127 +2,21 @@
 
 import { useState } from "react";
 import type { Workspace } from "@/types/domain";
+import type { DerivedWorkspaceContext } from "@/lib/data/context";
 import { updateWorkspaceContext } from "@/lib/actions/workspaces";
 
-function formatDate(dateStr: string | null) {
-  if (!dateStr) return "—";
-  return new Date(dateStr).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
-}
-
-export function WorkspaceContextPanel({ workspace }: { workspace: Workspace }) {
+export function WorkspaceContextPanel({ workspace, context }: { workspace: Workspace; context: DerivedWorkspaceContext }) {
   const [editing, setEditing] = useState(false);
-
-  if (!editing) {
-    return (
-      <div className="rounded-lg border border-border-light bg-surface p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-text-tertiary">
-            Contexto do Workspace
-          </h2>
-          <button
-            onClick={() => setEditing(true)}
-            className="text-xs font-medium text-accent hover:underline"
-          >
-            Editar
-          </button>
-        </div>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <div className="text-xs text-text-tertiary">Status Atual</div>
-            <div className="mt-0.5 text-text-primary">
-              {workspace.context_status || "—"}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-text-tertiary">Última Atualização</div>
-            <div className="mt-0.5 text-text-primary">
-              {formatDate(workspace.context_updated_at)}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-text-tertiary">Maior Risco</div>
-            <div className="mt-0.5 text-red-600">
-              {workspace.context_maior_risco || "—"}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-text-tertiary">Decisão mais Recente</div>
-            <div className="mt-0.5 text-accent">
-              {workspace.context_decisao_recente || "—"}
-            </div>
-          </div>
-          <div className="col-span-2 border-t border-border-light pt-3">
-            <div className="text-xs text-text-tertiary">Próximo Passo Sugerido</div>
-            <div className="mt-0.5 font-medium text-text-primary">
-              {workspace.context_proximo_passo || "—"}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <form
-      action={async (formData) => {
-        await updateWorkspaceContext(formData);
-        setEditing(false);
-      }}
-      className="rounded-lg border border-border-light bg-surface p-5"
-    >
-      <input type="hidden" name="id" value={workspace.id} />
-      <h2 className="mb-4 text-xs font-medium uppercase tracking-wide text-text-tertiary">
-        Editando Contexto
-      </h2>
-      <div className="flex flex-col gap-3 text-sm">
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-text-tertiary">Status Atual</span>
-          <input
-            name="context_status"
-            defaultValue={workspace.context_status ?? ""}
-            className="rounded-md border border-border px-2 py-1.5"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-text-tertiary">Maior Risco</span>
-          <input
-            name="context_maior_risco"
-            defaultValue={workspace.context_maior_risco ?? ""}
-            className="rounded-md border border-border px-2 py-1.5"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-text-tertiary">Decisão mais Recente</span>
-          <input
-            name="context_decisao_recente"
-            defaultValue={workspace.context_decisao_recente ?? ""}
-            className="rounded-md border border-border px-2 py-1.5"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-xs text-text-tertiary">Próximo Passo Sugerido</span>
-          <input
-            name="context_proximo_passo"
-            defaultValue={workspace.context_proximo_passo ?? ""}
-            className="rounded-md border border-border px-2 py-1.5"
-          />
-        </label>
-      </div>
-      <div className="mt-4 flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={() => setEditing(false)}
-          className="rounded-md px-3 py-1.5 text-xs text-text-secondary hover:bg-hover"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-hover"
-        >
-          Salvar
-        </button>
-      </div>
-    </form>
-  );
+  if (editing) return <form action={async (data) => { await updateWorkspaceContext(data); setEditing(false); }} className="rounded-lg border border-border-light bg-surface p-5">
+    <input type="hidden" name="id" value={workspace.id} />
+    <h2 className="mb-1 text-xs font-medium uppercase tracking-wide text-text-tertiary">Corrigir contexto</h2><p className="mb-4 text-xs text-text-tertiary">Use apenas quando a leitura automática não representar bem a situação.</p>
+    <div className="flex flex-col gap-3 text-sm">
+      <label className="flex flex-col gap-1"><span className="text-xs text-text-tertiary">Objetivo atual</span><input name="context_status" defaultValue={workspace.context_status ?? context.objective ?? ""} className="rounded-md border border-border px-2 py-1.5" /></label>
+      <label className="flex flex-col gap-1"><span className="text-xs text-text-tertiary">Maior risco</span><input name="context_maior_risco" defaultValue={workspace.context_maior_risco ?? context.majorRisk ?? ""} className="rounded-md border border-border px-2 py-1.5" /></label>
+      <label className="flex flex-col gap-1"><span className="text-xs text-text-tertiary">Última decisão</span><input name="context_decisao_recente" defaultValue={workspace.context_decisao_recente ?? context.lastDecision ?? ""} className="rounded-md border border-border px-2 py-1.5" /></label>
+      <label className="flex flex-col gap-1"><span className="text-xs text-text-tertiary">Próximo passo</span><input name="context_proximo_passo" defaultValue={workspace.context_proximo_passo ?? context.nextStep ?? ""} className="rounded-md border border-border px-2 py-1.5" /></label>
+    </div><div className="mt-4 flex justify-end gap-2"><button type="button" onClick={() => setEditing(false)} className="rounded-md px-3 py-1.5 text-xs text-text-secondary hover:bg-hover">Cancelar</button><button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-hover">Salvar correção</button></div>
+  </form>;
+  const item = (label: string, value: string | null, className = "text-text-primary") => <div><div className="text-xs text-text-tertiary">{label}</div><div className={`mt-0.5 ${className}`}>{value || "Ainda não há sinal suficiente."}</div></div>;
+  return <div className="rounded-lg border border-border-light bg-surface p-5"><div className="mb-4 flex items-center justify-between"><div><h2 className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Contexto atual</h2><p className="mt-1 text-xs text-text-tertiary">Derivado dos assuntos e acontecimentos deste espaço.</p></div><button onClick={() => setEditing(true)} className="text-xs font-medium text-accent hover:underline">Corrigir</button></div><div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">{item("Objetivo atual", context.objective)}{item("Última decisão", context.lastDecision, "text-accent")}{item("Maior risco", context.majorRisk, "text-red-600")}{item("Próximo passo", context.nextStep, "font-medium text-text-primary")}</div>{context.openThreads.length > 0 && <div className="mt-4 border-t border-border-light pt-3 text-xs text-text-tertiary">Assuntos abertos: {context.openThreads.map((thread) => thread.title).join(" · ")}</div>}</div>;
 }

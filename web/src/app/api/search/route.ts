@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { logObservation } from "@/lib/behavior/log";
 
 export interface SearchResult {
   id: string;
@@ -80,6 +81,8 @@ export async function GET(request: Request) {
       path: `/thread/${k.thread_id}`,
     })),
   ];
+
+  await logObservation("search_performed", { metadata: { query: q, result_count: results.length } });
 
   return NextResponse.json({ results });
 }

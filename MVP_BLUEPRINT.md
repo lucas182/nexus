@@ -296,7 +296,9 @@ Se algo não está na lista da seção 10, está aqui — por omissão.
 |---|---|---|
 | **Sprint 1** | Esqueleto funcional completo | Fluxo ponta a ponta (Captura → Inbox → Event → Radar) funcionando com dados reais no Supabase |
 | **Sprint 2** | Refinamento e regras | Insights determinísticos, anexos, atalhos, estados vazios, polish de UX |
+| **Sprint 2.5** | Observabilidade e Memória Comportamental | Entidade `Observation` + Behavior Engine determinístico (sem IA) — contexto real de uso para alimentar a Sprint 3. Detalhado em [`SPRINT_2_5.md`](./SPRINT_2_5.md) |
 | **Sprint 3** | Inteligência | Classificação assistida por IA, resumo automático, insights semânticos (contradição, dependência) |
+| **Sprint 4 (visão de futuro)** | Memory Replay | Narrativa reconstruída de um Workspace/Thread ("Como chegamos até aqui?"), a partir de `Observation` + `Events` + `Knowledge`. Não escopada ainda — registrada em [`SPRINT_2_5.md`](./SPRINT_2_5.md) §14 |
 
 ---
 

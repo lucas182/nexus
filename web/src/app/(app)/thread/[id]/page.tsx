@@ -8,6 +8,9 @@ import { ThreadDetailsPanel } from "@/components/thread-details-panel";
 import { NewEventForm } from "@/components/new-event-form";
 import { KnowledgeTypeBadge } from "@/components/badges";
 import { KnowledgeConsolidator } from "@/components/knowledge-consolidator";
+import { logObservation } from "@/lib/behavior/log";
+import { getThreadResumeContext } from "@/lib/data/context";
+import { ResumeContextCard } from "@/components/resume-context-card";
 
 export default async function ThreadPage({
   params,
@@ -18,10 +21,13 @@ export default async function ThreadPage({
   const thread = await getThread(id);
   if (!thread) notFound();
 
-  const [workspace, events, knowledgeItems] = await Promise.all([
+  await logObservation("thread_opened", { threadId: id, workspaceId: thread.workspace_id });
+
+  const [workspace, events, knowledgeItems, resume] = await Promise.all([
     getWorkspace(thread.workspace_id),
     getEventsByThread(id),
     getKnowledgeByThread(id),
+    getThreadResumeContext(id),
   ]);
   if (!workspace) notFound();
 
@@ -44,8 +50,13 @@ export default async function ThreadPage({
       </h1>
 
       <div className="mb-6">
-        <ThreadDetailsPanel thread={thread} workspaceId={workspace.id} />
+        <ThreadDetailsPanel
+          thread={thread}
+          workspaceId={workspace.id}
+        />
       </div>
+
+      <div className="mb-6"><ResumeContextCard resume={resume} /></div>
 
       {knowledgeItems.length > 0 && (
         <div className="mb-6">

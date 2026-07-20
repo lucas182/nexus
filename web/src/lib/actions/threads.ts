@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { ThreadStatus } from "@/types/domain";
+import { logObservation } from "@/lib/behavior/log";
 
 export async function createThread(formData: FormData) {
   const workspaceId = String(formData.get("workspace_id"));
@@ -31,6 +32,13 @@ export async function updateThreadStatus(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.from("threads").update({ status }).eq("id", id);
   if (error) throw error;
+
+  await logObservation(status === "archived" ? "thread_archived" : "thread_status_changed", {
+    entityId: id,
+    threadId: id,
+    workspaceId,
+    metadata: { status },
+  });
 
   revalidatePath(`/thread/${id}`);
   revalidatePath(`/workspace/${workspaceId}`);

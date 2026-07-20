@@ -9,10 +9,10 @@ import { WorkspaceIcon } from "@/lib/icon-map";
 import { getStalledThreads, daysSince } from "@/lib/data/insights";
 import { InsightChip } from "@/components/insight-chip";
 import { logObservation } from "@/lib/behavior/log";
-import { getWorkspaceActivityCount, getThreadActivityMap } from "@/lib/behavior/metrics";
-import { WorkspaceActivityBadge } from "@/components/workspace-activity-badge";
 import { CreatedToast } from "@/components/created-toast";
 import { DeleteWorkspaceButton } from "@/components/delete-workspace-button";
+import { getDerivedWorkspaceContext, getWorkspaceResumeContext } from "@/lib/data/context";
+import { ResumeContextCard } from "@/components/resume-context-card";
 
 export default async function WorkspacePage({
   params,
@@ -36,10 +36,10 @@ export default async function WorkspacePage({
     })),
   );
 
-  const [stalledThreadsRaw, activityCount, threadActivity] = await Promise.all([
+  const [stalledThreadsRaw, derivedContext, resume] = await Promise.all([
     getStalledThreads(),
-    getWorkspaceActivityCount(id),
-    getThreadActivityMap(threads.map((t) => t.id)),
+    getDerivedWorkspaceContext(workspace),
+    getWorkspaceResumeContext(id),
   ]);
   const stalledThreads = stalledThreadsRaw.filter((t) => t.workspace_id === id);
 
@@ -56,7 +56,6 @@ export default async function WorkspacePage({
               <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
                 {workspace.name}
               </h1>
-              <WorkspaceActivityBadge count={activityCount} />
             </div>
             {workspace.description && (
               <p className="text-sm text-text-tertiary">{workspace.description}</p>
@@ -67,8 +66,10 @@ export default async function WorkspacePage({
       </div>
 
       <div className="mb-8">
-        <WorkspaceContextPanel workspace={workspace} />
+        <WorkspaceContextPanel workspace={workspace} context={derivedContext} />
       </div>
+
+      <div className="mb-8"><ResumeContextCard resume={resume} /></div>
 
       {stalledThreads.length > 0 && (
         <div className="mb-8 flex flex-col gap-2">
@@ -96,7 +97,6 @@ export default async function WorkspacePage({
               key={thread.id}
               thread={thread}
               recentEvents={events}
-              lastObservedAt={threadActivity[thread.id]?.last_observed_at ?? null}
             />
           ))
         )}

@@ -1,4 +1,4 @@
-# Nexus — Web (Sprint 1 + 2)
+# Nexus — Web (Sprint 1 + 2 + 2.5)
 
 Next.js (App Router) + Supabase implementation of the Nexus MVP described in
 [`../MVP_BLUEPRINT.md`](../MVP_BLUEPRINT.md) and [`../DOMAIN.md`](../DOMAIN.md).
@@ -52,11 +52,27 @@ Live at **https://nexuslife360.vercel.app**.
 
 Radar now answers all 4 questions from `MVP_BLUEPRINT.md` §8 with real, live-computed data.
 
+**Sprint 2.5** — Observabilidade e Memória Comportamental (see [`../SPRINT_2_5.md`](../SPRINT_2_5.md)):
+- `Observation` entity — auto-created behavioral signal (workspace/thread opened, capture
+  created, event created, knowledge consolidated, thread status changed, search performed) —
+  `supabase/migrations/00000000000003_add_observations.sql`
+- Behavior Engine (`src/lib/behavior/`) — `log.ts` (non-blocking `logObservation()`, wired into
+  the existing Server Actions and page loaders) and `metrics.ts` (deterministic aggregation, no
+  LLM: most/least active Workspace, forgotten Threads, dominant Event types, capture time-of-day
+  pattern, consolidation lag, consecutive active days, daily timeline, weekly evolution)
+- Personal Timeline section on the Radar (today's captures/decisions/Knowledge, longest gap,
+  streak) and behavioral `InsightChip`s (most active Workspace, forgotten Threads, capture vs.
+  consolidation ratio) — all derived from real usage, still no LLM
+- `WorkspaceActivityBadge` (Workspace header) and `ThreadActivityMeter`
+  (`ThreadCard`/`ThreadDetailsPanel`) surfacing access frequency and recency
+- No new screens (per the 5-screen rule) and no `AIService` calls — this sprint exists purely to
+  give Sprint 3 real behavioral context to reason over
+
 ## Deliberately out of scope
 
 Per `MVP_BLUEPRINT.md` §15 (Sprint 3): LLM-assisted classification, automatic
 thread/workspace summarization, semantic insights (contradiction/dependency
-detection), Requested Insights on demand.
+detection), Requested Insights on demand, Memory Replay (see `SPRINT_2_5.md` §14).
 
 ## Deploying
 

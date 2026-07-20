@@ -63,6 +63,7 @@ export interface Event {
   description: string;
   impact: ImpactLevel;
   metadata: Record<string, unknown>;
+  source_inbox_item_id?: string | null;
   timestamp: string;
 }
 
