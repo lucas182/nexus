@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getCachedUser } from "@/lib/auth";
 
 export async function createWorkspace(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
@@ -11,9 +12,7 @@ export async function createWorkspace(formData: FormData) {
   if (!name) return;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCachedUser();
   if (!user) return;
 
   const { data, error } = await supabase
@@ -32,9 +31,7 @@ export async function deleteWorkspace(formData: FormData) {
   if (!id) return;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCachedUser();
   if (!user) return;
 
   const { error } = await supabase
