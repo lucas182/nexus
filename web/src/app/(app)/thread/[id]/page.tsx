@@ -44,18 +44,18 @@ export default async function ThreadPage({
       {created === "1" && <CreatedToast label={`Assunto "${thread.title}" criado`} />}
 
       {/* Title + workspace context */}
-      <div className="mb-6">
+      <div className="mb-7">
         <Link
           href={`/workspace/${workspace.id}`}
-          className="inline-flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary mb-2"
+          className="inline-flex items-center gap-1 text-xs text-text-quaternary transition-colors hover:text-text-secondary mb-3"
         >
           ← {workspace.name}
         </Link>
-        <div className="group flex items-start justify-between gap-3">
-          <h1 className="text-[1.6rem] font-semibold leading-tight tracking-tight text-text-primary">
+        <div className="flex items-start justify-between gap-3">
+          <h1 className="text-2xl font-medium leading-snug tracking-tight text-text-primary">
             {thread.title}
           </h1>
-          <div className="mt-1.5 flex-shrink-0">
+          <div className="mt-1 flex-shrink-0">
             <ThreadRowMenu
               threadId={thread.id}
               workspaceId={workspace.id}
@@ -67,7 +67,7 @@ export default async function ThreadPage({
       </div>
 
       {/* Thread context panel */}
-      <div className="mb-6">
+      <div className="mb-5">
         <ThreadDetailsPanel
           thread={thread}
           workspaceId={workspace.id}
@@ -75,20 +75,21 @@ export default async function ThreadPage({
       </div>
 
       {/* Resume from last visit */}
-      <div className="mb-6">
+      <div className="mb-5">
         <ResumeContextCard resume={resume} />
       </div>
 
       {/* Knowledge items */}
       {knowledgeItems.length > 0 && (
-        <div className="mb-6">
-          <h2 className="mb-2 text-xs font-semibold text-text-primary uppercase tracking-wider">
-            Knowledge
-          </h2>
+        <div className="mb-7">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-medium text-text-quaternary">Knowledge</span>
+            <span className="h-px flex-1 bg-border-light" />
+          </div>
           <div className="flex flex-col gap-2">
             {knowledgeItems.map((k) => (
-              <div key={k.id} className="rounded-lg border border-border-light bg-surface p-3">
-                <div className="flex items-center justify-between gap-2 mb-1">
+              <div key={k.id} className="rounded-[7px] border border-border-light bg-surface px-3.5 py-3">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
                   <span className="text-sm font-medium text-text-primary">{k.title}</span>
                   <KnowledgeTypeBadge type={k.type} />
                 </div>
@@ -101,10 +102,11 @@ export default async function ThreadPage({
 
       {/* Timeline */}
       <div>
-        <h2 className="mb-2 text-xs font-semibold text-text-primary uppercase tracking-wider">
-          Timeline
-        </h2>
-        <div className="rounded-lg border border-border-light bg-surface px-4">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs font-medium text-text-quaternary">Timeline</span>
+          <span className="h-px flex-1 bg-border-light" />
+        </div>
+        <div className="rounded-[7px] border border-border-light bg-surface px-3.5">
           <KnowledgeConsolidator threadId={thread.id} events={events} />
         </div>
         <NewEventForm threadId={thread.id} workspaceId={workspace.id} />

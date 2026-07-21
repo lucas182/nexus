@@ -87,7 +87,7 @@ export function AppShell({
           </button>
           <span className="text-sm font-semibold text-text-primary">Nexus</span>
         </div>
-        <main key={pathname} className="animate-page-in flex-1 overflow-y-auto bg-bg px-4 py-6 md:px-8 md:py-8">
+        <main key={pathname} className="animate-fade-in flex-1 overflow-y-auto bg-bg px-4 py-6 md:px-8 md:py-8">
           {children}
         </main>
       </div>

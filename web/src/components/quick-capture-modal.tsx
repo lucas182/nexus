@@ -33,7 +33,7 @@ export function QuickCaptureModal({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
       <div className="absolute inset-0" onClick={onClose} />
-      <div className="relative w-full max-w-lg animate-pop-in">
+      <div className="relative w-full max-w-lg animate-scale-in">
         <form ref={formRef} action={captureToInbox}>
           <textarea
             ref={textareaRef}

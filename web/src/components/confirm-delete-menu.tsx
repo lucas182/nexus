@@ -63,7 +63,7 @@ export function ConfirmDeleteMenu({
 
       {open && (
         <div
-          className={`animate-pop-in absolute top-6 z-50 w-52 rounded-lg border border-border-light bg-surface p-1 shadow-md ${
+          className={`animate-scale-in absolute top-6 z-50 w-52 rounded-lg border border-border-light bg-surface p-1 shadow-md ${
             align === "right" ? "right-0" : "left-0"
           }`}
         >

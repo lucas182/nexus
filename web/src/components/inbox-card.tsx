@@ -17,10 +17,6 @@ export function InboxCard({ item, workspaces, threads, selected, onSelect }: {
   const [newThread, setNewThread] = useState("");
   const threadsForWorkspace = threads.filter((t) => t.workspace_id === workspaceId);
   const canResolve = Boolean(threadId || (workspaceId && newThread.trim()));
-  // Reset picker when suggestion context changes
-  if (hasSuggestion && !showPicker && (workspaceId !== item.suggested_workspace_id || threadId !== item.suggested_thread_id)) {
-    // controlled via setShowPicker — no-op to satisfy React rules
-  }
 
   return (
     <div className={`mb-2 rounded-lg border bg-surface p-3.5 transition-colors ${selected ? "border-accent bg-accent-soft/30" : "border-border-light"}`}>

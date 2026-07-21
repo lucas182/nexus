@@ -100,8 +100,8 @@ export function GlobalSearchModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-      <div className="absolute inset-0 bg-black/10 animate-overlay-in" onClick={handleClose} />
-      <div className="relative flex max-h-[65vh] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-border-light bg-surface shadow-search">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className="relative flex max-h-[65vh] w-full max-w-lg flex-col overflow-hidden rounded-[10px] border border-border-light bg-surface shadow-search">
         {/* Input row */}
         <div className="flex items-center gap-2.5 border-b border-border-light px-4 py-3">
           <Search size={15} className="flex-shrink-0 text-text-tertiary" strokeWidth={1.5} />

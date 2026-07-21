@@ -18,25 +18,30 @@ export function PersonalTimelineSection({
   const hasActivity = timeline.captures + timeline.decisions + timeline.knowledgeConsolidated > 0;
 
   return (
-    <div className="rounded-lg border border-border-light bg-surface p-3.5">
-      <h2 className="text-[10px] font-medium uppercase tracking-widest text-text-tertiary">
-        Timeline Pessoal — Hoje
-      </h2>
+    <div className="rounded-[7px] border border-border-light bg-surface px-3.5 py-3">
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="text-[10px] font-medium uppercase tracking-[0.05em] text-text-quaternary">
+          Hoje
+        </span>
+        {consecutiveActiveDays > 1 && (
+          <span className="text-[10px] text-text-quaternary">· {consecutiveActiveDays}d consecutivos</span>
+        )}
+      </div>
       {hasActivity ? (
-        <p className="mt-1.5 text-sm text-text-primary">
-          {timeline.captures} {timeline.captures === 1 ? "captura" : "capturas"} ·{" "}
-          {timeline.decisions} {timeline.decisions === 1 ? "decisão" : "decisões"} ·{" "}
-          {timeline.knowledgeConsolidated}{" "}
-          {timeline.knowledgeConsolidated === 1 ? "Knowledge" : "Knowledges"}
+        <p className="text-sm text-text-primary leading-relaxed">
+          {timeline.captures} {timeline.captures === 1 ? "captura" : "capturas"}
+          {timeline.decisions > 0 && (
+            <> · {timeline.decisions} {timeline.decisions === 1 ? "decisão" : "decisões"}</>
+          )}
+          {timeline.knowledgeConsolidated > 0 && (
+            <> · {timeline.knowledgeConsolidated} consolidated</>
+          )}
         </p>
       ) : (
-        <p className="mt-1.5 text-sm text-text-tertiary">Nenhuma atividade registrada hoje ainda.</p>
+        <p className="text-sm text-text-quaternary">Nenhuma atividade hoje ainda.</p>
       )}
-      {(gap || consecutiveActiveDays > 1) && (
-        <div className="mt-1 flex flex-wrap gap-x-3 text-[11px] text-text-tertiary">
-          {gap && <span>Maior intervalo: {gap}</span>}
-          {consecutiveActiveDays > 1 && <span>{consecutiveActiveDays} dias consecutivos</span>}
-        </div>
+      {gap && (
+        <p className="mt-0.5 text-[11px] text-text-quaternary">Maior intervalo: {gap}</p>
       )}
     </div>
   );

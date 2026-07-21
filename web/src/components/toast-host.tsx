@@ -30,7 +30,7 @@ export function ToastHost() {
           aria-live="polite"
           className="animate-toast-in flex items-center gap-2 rounded-full border border-border-light bg-surface py-1.5 pl-2 pr-3.5 text-sm text-text-primary shadow-sm"
         >
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-accent-foreground">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white">
             <Check size={9} strokeWidth={2.5} />
           </span>
           <span className="text-xs">{toast.message}</span>

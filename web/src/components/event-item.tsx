@@ -16,15 +16,15 @@ export function EventItem({ event }: { event: Event }) {
     typeof event.metadata?.attachment_url === "string" ? event.metadata.attachment_url : null;
 
   return (
-    <div className="flex gap-2.5 border-b border-border-light py-2.5 last:border-0">
+    <div className="group flex gap-3 py-2.5">
       <div className="mt-0.5 flex-shrink-0">
         <EventTypeBadge type={event.type} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-sm text-text-primary leading-relaxed">{event.description}</p>
-        <div className="mt-0.5 flex flex-wrap gap-x-2 text-[10px] text-text-tertiary">
+        <div className="mt-0.5 flex flex-wrap gap-x-2 text-[10px] text-text-quaternary">
           <span>{formatDateTime(event.timestamp)}</span>
-          <span>·</span>
+          <span className="text-border-light">·</span>
           <span><ImpactLabel impact={event.impact} /></span>
         </div>
         {attachmentUrl && (

@@ -54,37 +54,37 @@ export default async function WorkspacePage({
   after(() => logObservation("workspace_opened", { workspaceId: id }));
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-[640px]">
       {created === "1" && <CreatedToast label={`Workspace "${workspace.name}" criado`} />}
       {deleted === "1" && <CreatedToast label={`Thread removida`} />}
 
       {/* Back link + header */}
-      <div className="mb-6">
+      <div className="mb-7">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary mb-2"
+          className="inline-flex items-center gap-1 text-xs text-text-quaternary transition-colors hover:text-text-secondary mb-3"
         >
           ← Radar
         </Link>
-        <h1 className="text-xl font-semibold tracking-tight text-text-primary">{workspace.name}</h1>
+        <h1 className="text-xl font-medium tracking-tight text-text-primary">{workspace.name}</h1>
         {workspace.description && (
-          <p className="mt-0.5 text-sm text-text-tertiary">{workspace.description}</p>
+          <p className="mt-0.5 text-sm text-text-quaternary">{workspace.description}</p>
         )}
       </div>
 
       {/* Context panel */}
-      <div className="mb-6">
+      <div className="mb-5">
         <WorkspaceContextPanel workspace={workspace} context={derivedContext} />
       </div>
 
       {/* Resume */}
-      <div className="mb-6">
+      <div className="mb-5">
         <ResumeContextCard resume={resume} />
       </div>
 
       {/* Stalled threads alerts */}
       {stalledThreads.length > 0 && (
-        <div className="mb-6 flex flex-col gap-2">
+        <div className="mb-5 flex flex-col gap-2">
           {stalledThreads.map((t) => (
             <InsightChip key={t.id}>
               A Thread <strong>{t.title}</strong> está sem novos acontecimentos há{" "}
@@ -96,17 +96,18 @@ export default async function WorkspacePage({
 
       {/* Threads */}
       <div>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-text-primary">Assuntos</h2>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs font-medium text-text-quaternary">Assuntos</span>
+          <span className="h-px flex-1 bg-border-light" />
         </div>
         <NewThreadForm workspaceId={workspace.id} />
         {threadsWithEvents.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-border py-10 text-center">
-            <p className="text-sm text-text-tertiary">Nenhuma Thread ainda. Crie a primeira acima.</p>
+          <div className="py-10 text-center">
+            <p className="text-sm text-text-quaternary">Nenhum assunto ainda.</p>
           </div>
         ) : (
           threadsWithEvents.map(({ thread, events }, i) => (
-            <div key={thread.id} className="animate-card-in" style={{ animationDelay: `${Math.min(i, 6) * 30}ms` }}>
+            <div key={thread.id} className="animate-slide-up" style={{ animationDelay: `${Math.min(i, 6) * 30}ms` }}>
               <ThreadCard thread={thread} recentEvents={events} />
             </div>
           ))

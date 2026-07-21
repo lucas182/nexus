@@ -58,7 +58,7 @@ export function InboxList({ items, workspaces, threads }: { items: InboxItem[]; 
         </form>
       )}
       {items.map((item, i) => (
-        <div key={item.id} className="animate-card-in" style={{ animationDelay: `${Math.min(i, 6) * 30}ms` }}>
+        <div key={item.id} className="animate-slide-up" style={{ animationDelay: `${Math.min(i, 6) * 30}ms` }}>
           <InboxCard item={item} workspaces={workspaces} threads={threads} selected={selected.has(item.id)} onSelect={toggle} />
         </div>
       ))}

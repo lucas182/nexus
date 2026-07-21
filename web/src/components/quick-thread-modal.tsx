@@ -49,8 +49,8 @@ export function QuickThreadModal({
   if (workspaces.length === 0) {
     return (
       <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-        <div className="absolute inset-0 animate-overlay-in bg-black/10" onClick={handleClose} />
-        <div className="animate-pop-in relative w-full max-w-sm rounded-lg border border-border-light bg-surface p-4 text-sm text-text-secondary shadow-xl">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className="animate-scale-in relative w-full max-w-sm rounded-lg border border-border-light bg-surface p-4 text-sm text-text-secondary shadow-xl">
           Crie um Workspace antes de registrar um assunto.
         </div>
       </div>
@@ -64,8 +64,8 @@ export function QuickThreadModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-      <div className="absolute inset-0 animate-overlay-in bg-black/10" onClick={handleClose} />
-      <div className="animate-pop-in relative w-full max-w-md rounded-lg border border-border-light bg-surface p-4 shadow-xl">
+      <div className="absolute inset-0" onClick={handleClose} />
+      <div className="animate-scale-in relative w-full max-w-md rounded-lg border border-border-light bg-surface p-4 shadow-xl">
         <h3 className="mb-3 text-[10px] font-medium uppercase tracking-widest text-text-tertiary">
           Novo assunto
         </h3>

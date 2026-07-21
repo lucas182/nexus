@@ -10,17 +10,18 @@ function timeAgo(value: string) {
 
 export function ContinueContextCard({ item }: { item: ContinueContext }) {
   return (
-    <div className="rounded-lg border border-accent-muted/50 bg-accent-soft/50 p-3.5">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-text-secondary">
-            Continue de <strong>{item.workspaceName}</strong> · {item.threadTitle}
+    <div className="rounded-[7px] border border-accent-muted/40 bg-accent-soft/50 px-3.5 py-2.5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs text-text-secondary truncate">
+            Continue de <span className="font-medium text-text-primary">{item.workspaceName}</span>
+            {item.threadTitle && <> · {item.threadTitle}</>}
           </p>
-          <p className="text-[10px] text-text-tertiary mt-0.5">última visita {timeAgo(item.lastVisitedAt)}</p>
+          <p className="text-[10px] text-text-quaternary mt-0.5">{timeAgo(item.lastVisitedAt)}</p>
         </div>
         <Link
           href={`/thread/${item.threadId}`}
-          className="flex-shrink-0 rounded-md bg-accent px-2.5 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent-hover active:scale-[0.98]"
+          className="flex-shrink-0 rounded-[5px] bg-accent px-2.5 py-1.5 text-[11px] font-medium text-white transition-all duration-150 hover:bg-accent-hover active:scale-[0.97]"
         >
           Continuar
         </Link>
@@ -33,25 +34,13 @@ export function ResumeContextCard({ resume }: { resume: ResumeContext }) {
   if (!resume.lastVisitedAt) return null;
   const count = resume.eventsSinceVisit.length;
   return (
-    <div className="rounded-lg border border-border-light bg-surface p-3">
-      <div className="flex items-center gap-2 text-xs text-text-secondary">
-        <span className="text-text-tertiary">Desde sua última visita</span>
-        <span className="h-1 w-1 rounded-full bg-border" />
-        <span>
-          {count === 0
-            ? "Nada mudou."
-            : `${count} ${count === 1 ? "novo acontecimento" : "novos acontecimentos"}`}
-        </span>
-        {resume.decisionsSinceVisit.length > 0 && (
-          <>
-            <span className="h-1 w-1 rounded-full bg-border" />
-            <span className="text-accent">
-              {resume.decisionsSinceVisit.length} {" "}
-              {resume.decisionsSinceVisit.length === 1 ? "decisão" : "decisões"}
-            </span>
-          </>
-        )}
-      </div>
+    <div className="text-xs text-text-quaternary leading-relaxed">
+      {count === 0
+        ? "Nada mudou desde sua última visita."
+        : `${count} ${count === 1 ? "novo acontecimento" : "novos acontecimentos"}`}
+      {resume.decisionsSinceVisit.length > 0 && (
+        <> · <span className="text-accent">{resume.decisionsSinceVisit.length} {resume.decisionsSinceVisit.length === 1 ? "decisão" : "decisões"}</span></>
+      )}
     </div>
   );
 }

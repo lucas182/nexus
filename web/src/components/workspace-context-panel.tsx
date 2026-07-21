@@ -44,39 +44,41 @@ export function WorkspaceContextPanel({ workspace, context }: { workspace: Works
   }
 
   return (
-    <div className="rounded-lg border border-border-light bg-surface p-4">
+    <div className="rounded-[7px] border border-accent-muted/30 bg-accent-soft/40 px-4 py-3.5">
       <div className="flex items-start justify-between gap-2 mb-3">
-        <h2 className="text-[10px] font-medium uppercase tracking-widest text-text-tertiary">Contexto</h2>
-        <button onClick={() => setEditing(true)} className="text-[10px] text-text-tertiary transition-colors hover:text-text-secondary">Editar</button>
+        <h2 className="text-[10px] font-medium uppercase tracking-[0.05em] text-accent">Contexto</h2>
+        <button onClick={() => setEditing(true)} className="text-[10px] text-text-quaternary transition-colors hover:text-text-secondary">Editar</button>
       </div>
       <div className="grid grid-cols-1 gap-2.5 text-sm sm:grid-cols-2">
         {context.objective && (
-          <div>
-            <div className="text-[10px] text-text-tertiary">Objetivo</div>
-            <div className="mt-0.5 text-text-primary">{context.objective}</div>
+          <div className="col-span-2">
+            <div className="text-[10px] text-text-quaternary">Objetivo</div>
+            <div className="mt-0.5 text-text-primary leading-relaxed">{context.objective}</div>
           </div>
         )}
-        {context.lastDecision && (
-          <div>
-            <div className="text-[10px] text-text-tertiary">Última decisão</div>
-            <div className="mt-0.5 text-accent">{context.lastDecision}</div>
-          </div>
-        )}
-        {context.majorRisk && (
-          <div>
-            <div className="text-[10px] text-text-tertiary">Maior risco</div>
-            <div className="mt-0.5 text-red">{context.majorRisk}</div>
-          </div>
-        )}
+        <div className="grid grid-cols-2 gap-3 col-span-2">
+          {context.lastDecision && (
+            <div>
+              <div className="text-[10px] text-text-quaternary">Última decisão</div>
+              <div className="mt-0.5 text-sm text-accent leading-relaxed">{context.lastDecision}</div>
+            </div>
+          )}
+          {context.majorRisk && (
+            <div>
+              <div className="text-[10px] text-text-quaternary">Maior risco</div>
+              <div className="mt-0.5 text-sm text-red leading-relaxed">{context.majorRisk}</div>
+            </div>
+          )}
+        </div>
         {context.nextStep && (
-          <div>
-            <div className="text-[10px] text-text-tertiary">Próximo passo</div>
-            <div className="mt-0.5 font-medium text-text-primary">{context.nextStep}</div>
+          <div className="col-span-2">
+            <div className="text-[10px] text-text-quaternary">Próximo passo</div>
+            <div className="mt-0.5 text-sm font-medium text-text-primary leading-relaxed">{context.nextStep}</div>
           </div>
         )}
       </div>
       {context.openThreads.length > 0 && (
-        <div className="mt-2.5 border-t border-border-light pt-2.5 text-[10px] text-text-tertiary">
+        <div className="mt-3 border-t border-accent-muted/20 pt-2.5 text-[10px] text-text-quaternary leading-relaxed">
           {context.openThreads.map((t) => t.title).join(" · ")}
         </div>
       )}

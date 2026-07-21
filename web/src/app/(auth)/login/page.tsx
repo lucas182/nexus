@@ -32,14 +32,14 @@ export default async function LoginPage({
           type="email"
           placeholder="Email"
           required
-          className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-text-primary outline-none transition-all placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
+          className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-text-primary outline-none transition-all duration-150 placeholder:text-text-quaternary focus:border-accent"
         />
         <input
           name="password"
           type="password"
           placeholder="Senha"
           required
-          className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-text-primary outline-none transition-all placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
+          className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-text-primary outline-none transition-all duration-150 placeholder:text-text-quaternary focus:border-accent"
         />
         <button
           type="submit"

@@ -1,39 +1,40 @@
 @import "tailwindcss";
 
-/*
-  Nexus Design Tokens — refined for calm, clarity, and focus.
-  Light-only. Inspired by Linear, Notion, and Apple HIG.
-  Every token has a function. No decoration.
-*/
+/* ═══════════════════════════════════════════════════════
+   Nexus Design System — refined for calm, clarity, focus
+   Inspired by Linear, Apple HIG, and Vercel.
+   The interface should disappear. The thinking appears.
+   ═══════════════════════════════════════════════════════ */
+
 :root {
   /* ─── Surfaces ─────────────────────────────── */
-  --bg: #F7F7F8;
+  --bg: #F6F6F8;
   --surface: #FFFFFF;
+  --surface-raised: #FBFBFC;
 
-  /* ─── Borders ──────────────────────────────── */
-  --border: #E8E8E8;
-  --border-light: #F0F0F1;
+  /* ─── Borders — barely perceptible ─────────── */
+  --border: #E5E5E5;
+  --border-light: #EEEEF0;
 
-  /* ─── Text — reduced contrast for calmness ─── */
-  --text-primary: #1A1A1A;
-  --text-secondary: #6B6B6B;  /* ~7:1 on white */
-  --text-tertiary: #8E8E8E;   /* ~4.5:1 on white — AA */
+  /* ─── Text — clarity through restraint ─────── */
+  --text-primary: #171717;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #999999;
+  --text-quaternary: #B0B0B0;
 
-  /* ─── Accent (purple) ──────────────────────── */
+  /* ─── Accent (purple) — used sparingly ─────── */
   --accent: #6C5CE7;
   --accent-hover: #5A4BD6;
   --accent-soft: #F0EEFF;
-  --accent-muted: #E2DEFF;
-  --accent-foreground: #FFFFFF;
+  --accent-muted: #E4E0FF;
 
   /* ─── Interactive surfaces ──────────────────── */
-  --hover: #F3F3F4;
-  --active: #EBEBEC;
+  --hover: #F2F2F4;
+  --active: #E8E8EB;
 
-  /* ─── Semantic / destructive ────────────────── */
-  --red: #E03E3E;
+  /* ─── Semantic — reserved for meaning ───────── */
+  --red: #DC2626;
   --red-soft: #FEF2F2;
-  --red-border: #FEE2E2;
   --amber: #B45309;
   --amber-soft: #FFFBEB;
   --green: #059669;
@@ -42,27 +43,25 @@
   /* ─── Event/Knowledge type indicators ──────── */
   --type-decision: #6C5CE7;
   --type-idea: #D97706;
-  --type-problem: #E03E3E;
+  --type-problem: #DC2626;
   --type-note: #9CA3AF;
   --type-learning: #059669;
   --type-meeting: #7C3AED;
   --type-activity: #0891B2;
   --type-pattern: #DB2777;
 
-  /* ─── Radii — two-value system ──────────────── */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* ─── Radii — consistent 3-value system ────── */
+  --radius-sm: 5px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
 
-  /* ─── Shadows — barely there ────────────────── */
-  --shadow-xs: 0 0 0 1px rgba(0, 0, 0, 0.03);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.02);
-  --shadow-search: 0 24px 64px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.03);
-
-  /* ─── Spacing system (4px base) — for future CSS-in-JS use ── */
+  /* ─── Shadows — depth through separation, not decoration ── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.07);
+  --shadow-search: 0 20px 60px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 @theme inline {
@@ -70,25 +69,25 @@
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
+
   --color-border: var(--border);
   --color-border-light: var(--border-light);
 
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-tertiary: var(--text-tertiary);
+  --color-text-quaternary: var(--text-quaternary);
 
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-accent-muted: var(--accent-muted);
-  --color-accent-foreground: var(--accent-foreground);
 
   --color-hover: var(--hover);
   --color-active: var(--active);
 
   --color-red: var(--red);
   --color-red-soft: var(--red-soft);
-  --color-red-border: var(--red-border);
   --color-amber: var(--amber);
   --color-amber-soft: var(--amber-soft);
   --color-green: var(--green);
@@ -103,15 +102,14 @@
   --color-type-activity: var(--type-activity);
   --color-type-pattern: var(--type-pattern);
 
-  /* Calm type scale — denser than default, optimized for reading flow */
+  /* Refined type scale — 1.15 ratio, tight but legible */
   --text-xs: 0.6875rem;   /* 11px */
   --text-sm: 0.8125rem;   /* 13px */
   --text-base: 0.9375rem; /* 15px */
   --text-md: 1.0625rem;   /* 17px */
-  --text-lg: 1.25rem;     /* 20px */
-  --text-xl: 1.5rem;      /* 24px */
-  --text-2xl: 1.75rem;    /* 28px */
-  --text-3xl: 2rem;       /* 32px */
+  --text-lg: 1.1875rem;   /* 19px */
+  --text-xl: 1.375rem;    /* 22px */
+  --text-2xl: 1.625rem;   /* 26px */
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
@@ -128,103 +126,95 @@
 body {
   background: var(--bg);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* Visible, on-brand focus ring for keyboard users — accent-muted is softer than accent. */
+/* Focus ring — minimal, purposeful. Never colorful. */
 :focus-visible {
-  outline: 2px solid var(--accent-muted);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 1.5px var(--accent);
   border-radius: 4px;
 }
 
-/* ─── Motion ─────────────────────────────────────────────────────────── */
+/* ─── Motion — deliberate, never rushed ───────────── */
 
-@keyframes field-in {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes toast-in {
-  from { opacity: 0; transform: translate(-50%, -4px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
-}
-
-@keyframes card-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes page-in {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shimmer {
-  from { background-position: -180% 0; }
-  to { background-position: 180% 0; }
-}
-
-@keyframes overlay-in {
+@keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes pop-in {
-  from { opacity: 0; transform: scale(0.97) translateY(3px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-field-in { animation: field-in 0.24s ease-out backwards; }
-.animate-toast-in { animation: toast-in 0.2s ease-out; }
-.animate-card-in { animation: card-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-.animate-page-in { animation: page-in 0.2s ease-out; }
-.animate-overlay-in { animation: overlay-in 0.14s ease-out; }
-.animate-pop-in { animation: pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1); }
-.animate-slide-up { animation: slide-up 0.25s ease-out; }
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-/* Skeleton shimmer — softer gradient */
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, -6px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes field-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.animate-fade-in { animation: fade-in 0.18s ease-out; }
+.animate-slide-up { animation: slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-scale-in { animation: scale-in 0.22s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-toast-in { animation: toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-field-in { animation: field-in 0.2s ease-out backwards; }
+
+/* Skeleton — calm, no harsh gradient */
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--hover) 25%,
-    #eee 37%,
-    var(--hover) 63%
+    var(--hover) 0%,
+    #F0F0F2 40%,
+    var(--hover) 80%
   );
-  background-size: 400% 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  background-size: 300% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
 
-/* Subtle press feedback for interactive elements */
+/* Subtle press — feels responsive, never distracting */
 .press {
-  transition: transform 0.06s ease;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 .press:active {
-  transform: scale(0.985);
+  transform: scale(0.97);
 }
 
-/* Reduce visual noise from default checkbox/radio styles */
+/* Quiet checkboxes and radios */
 input[type="checkbox"],
 input[type="radio"] {
   accent-color: var(--accent);
 }
 
+/* Selection — brand-adjacent, not brand-loud */
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-field-in,
-  .animate-toast-in,
-  .animate-card-in,
-  .animate-page-in,
-  .animate-overlay-in,
-  .animate-pop-in,
+  .animate-fade-in,
   .animate-slide-up,
+  .animate-scale-in,
+  .animate-toast-in,
+  .animate-field-in,
   .skeleton,
   .press {
     animation: none !important;

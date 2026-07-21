@@ -25,7 +25,7 @@ export function NewEventForm({ threadId, workspaceId }: { threadId: string; work
           ref={inputRef}
           name="raw_text"
           placeholder="O que aconteceu? Enter para registrar"
-          className="h-9 min-h-[36px] flex-1 resize-none rounded-lg border border-border-light bg-surface px-3 py-1.5 text-sm text-text-primary outline-none transition-all placeholder:text-text-tertiary/60 focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
+          className="h-9 min-h-[36px] flex-1 resize-none rounded-[5px] border border-border-light bg-surface px-3 py-1.5 text-sm text-text-primary outline-none transition-all duration-150 placeholder:text-text-quaternary/80 focus:border-accent"
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
@@ -35,13 +35,13 @@ export function NewEventForm({ threadId, workspaceId }: { threadId: string; work
         />
         <button
           type="submit"
-          className="flex-shrink-0 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98]"
+          className="flex-shrink-0 rounded-[5px] bg-accent px-3 py-1.5 text-xs font-medium text-white transition-all duration-150 hover:bg-accent-hover active:scale-[0.97]"
         >
           Enviar
         </button>
       </form>
       {recent && (
-        <p className="mt-1 text-[10px] text-text-tertiary/60">Registrado: {recent.slice(0, 60)}</p>
+        <p className="mt-1 text-[10px] text-text-quaternary/70">Registrado: {recent.slice(0, 60)}</p>
       )}
     </div>
   );
