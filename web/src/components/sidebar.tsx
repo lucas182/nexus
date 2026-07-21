@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox, Radar, Plus, Search, LogOut, PenLine } from "lucide-react";
+import { Inbox, Radar, Plus, Search, LogOut } from "lucide-react";
 
 import type { Workspace } from "@/types/domain";
-import { WorkspaceIcon } from "@/lib/icon-map";
 import { logout } from "@/lib/actions/auth";
-import { WorkspaceRowMenu } from "@/components/workspace-row-menu";
 
 export function Sidebar({
   workspaces,
@@ -50,36 +48,15 @@ export function Sidebar({
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Brand + Capture */}
-        <div className="flex items-center justify-between px-3 pt-4 pb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold tracking-tight text-text-primary">
-              Nexus
-            </span>
-            <span className="h-1 w-1 rounded-full bg-accent/60" />
-          </div>
-          <button
-            onClick={onCaptureClick}
-            title="Captura Rápida (+)"
-            className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-hover hover:text-text-primary"
-          >
-            <Plus size={14} strokeWidth={1.5} />
-          </button>
+        {/* Brand */}
+        <div className="flex items-center gap-2 px-3 pt-5 pb-5">
+          <span className="text-sm font-semibold tracking-tight text-text-primary">
+            Nexus
+          </span>
+          <span className="h-1 w-1 rounded-full bg-accent/60" />
         </div>
 
-        {/* Always-visible quick action */}
-        <div className="px-2 pb-2">
-          <button
-            onClick={onNewThreadClick}
-            title="Novo assunto (Shift+N)"
-            className="flex w-full items-center gap-2 rounded-md border border-dashed border-border px-2.5 py-1.5 text-xs font-medium text-text-secondary transition-all hover:border-accent-muted hover:bg-accent-soft hover:text-accent"
-          >
-            <PenLine size={13} strokeWidth={1.5} />
-            <span className="flex-1 text-left">Novo assunto</span>
-          </button>
-        </div>
-
-        {/* Navigation */}
+        {/* Navigation — just the essentials */}
         <nav className="flex flex-col gap-0.5 px-2">
           <Link href="/" onClick={onMobileClose} className={navItemClass(pathname === "/")}>
             <Radar size={16} strokeWidth={1.5} />
@@ -101,23 +78,36 @@ export function Sidebar({
           </Link>
         </nav>
 
-        {/* Workspaces section */}
-        <div className="mt-6 mb-1 flex items-center justify-between px-3">
+        {/* Quick actions */}
+        <div className="mt-3 flex flex-col gap-0.5 px-2">
+          <button
+            onClick={onCaptureClick}
+            className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-text-tertiary transition-colors hover:bg-hover hover:text-text-secondary"
+          >
+            <Plus size={16} strokeWidth={1.5} />
+            <span className="flex-1 text-left">Capturar</span>
+            <kbd className="rounded border border-border bg-hover px-1.5 py-[1px] text-[9px] font-medium text-text-tertiary">
+              N
+            </kbd>
+          </button>
+
+          <button
+            onClick={onSearchClick}
+            className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-text-tertiary transition-colors hover:bg-hover hover:text-text-secondary"
+          >
+            <Search size={16} strokeWidth={1.5} />
+            <span className="flex-1 text-left">Buscar</span>
+            <kbd className="rounded border border-border bg-hover px-1.5 py-[1px] text-[9px] font-medium text-text-tertiary">
+              ⌘K
+            </kbd>
+          </button>
+        </div>
+
+        {/* Content areas — shown contextually from Radar/Inbox */}
+        <div className="mt-6 mb-1 px-3">
           <span className="text-[10px] font-medium uppercase tracking-widest text-text-tertiary">
             Workspaces
           </span>
-          <Link
-            href="/workspace/new"
-            onClick={onMobileClose}
-            title="Novo Workspace"
-            className={`flex h-5 w-5 items-center justify-center rounded transition-colors ${
-              workspaces.length === 0
-                ? "text-accent hover:bg-accent-soft"
-                : "text-text-tertiary hover:text-text-primary hover:bg-hover"
-            }`}
-          >
-            <Plus size={12} strokeWidth={1.5} />
-          </Link>
         </div>
 
         <div className="flex-1 overflow-y-auto px-2 pb-2">
@@ -130,39 +120,31 @@ export function Sidebar({
               {workspaces.map((ws) => {
                 const active = pathname === `/workspace/${ws.id}`;
                 return (
-                  <div key={ws.id} className="group relative">
-                    <Link
-                      href={`/workspace/${ws.id}`}
-                      onClick={onMobileClose}
-                      className={navItemClass(active)}
-                    >
-                      <WorkspaceIcon slug={ws.icon} size={16} strokeWidth={1.5} />
-                      <span className="flex-1 truncate">{ws.name}</span>
-                      <span className="w-4 flex-shrink-0" />
-                    </Link>
-                    <div className="absolute right-1 top-1/2 -translate-y-1/2">
-                      <WorkspaceRowMenu workspaceId={ws.id} workspaceName={ws.name} />
-                    </div>
-                  </div>
+                  <Link
+                    key={ws.id}
+                    href={`/workspace/${ws.id}`}
+                    onClick={onMobileClose}
+                    className={navItemClass(active)}
+                    title={ws.description ?? ws.name}
+                  >
+                    <span className="flex-1 truncate">{ws.name}</span>
+                  </Link>
                 );
               })}
             </div>
           )}
+          <Link
+            href="/workspace/new"
+            onClick={onMobileClose}
+            className="mt-1 flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-text-tertiary transition-colors hover:text-text-primary hover:bg-hover"
+          >
+            <Plus size={12} strokeWidth={1.5} />
+            <span>Novo workspace</span>
+          </Link>
         </div>
 
-        {/* Bottom: Search + User */}
+        {/* Bottom: User */}
         <div className="flex flex-col gap-0.5 border-t border-border-light p-2">
-          <button
-            onClick={onSearchClick}
-            className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-text-tertiary transition-colors hover:bg-hover hover:text-text-secondary"
-          >
-            <Search size={16} strokeWidth={1.5} />
-            <span className="flex-1 text-left">Buscar</span>
-            <kbd className="rounded border border-border bg-hover px-1.5 py-[1px] text-[9px] font-medium text-text-tertiary">
-              ⌘K
-            </kbd>
-          </button>
-
           {userEmail && (
             <div className="flex items-center gap-2 rounded-md px-2.5 py-1.5">
               <span className="min-w-0 flex-1 truncate text-xs text-text-tertiary" title={userEmail}>

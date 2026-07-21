@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getInboxItems } from "@/lib/data/inbox";
 import { getWorkspaces } from "@/lib/data/workspaces";
 import { getAllThreads } from "@/lib/data/threads";
@@ -8,16 +7,9 @@ export default async function InboxPage() {
   const [items, workspaces, threads] = await Promise.all([getInboxItems(), getWorkspaces(), getAllThreads()]);
   return (
     <div className="mx-auto max-w-2xl">
-      {/* Breadcrumb */}
-      <div className="mb-6 flex items-center gap-1.5 text-xs text-text-tertiary">
-        <Link href="/" className="hover:text-text-secondary transition-colors">Radar</Link>
-        <span className="text-text-tertiary/50">/</span>
-        <span className="text-text-secondary">Inbox</span>
-      </div>
-
       <div className="mb-6">
         <h1 className="text-xl font-semibold tracking-tight text-text-primary">Inbox</h1>
-        <p className="mt-1 text-sm text-text-tertiary">Registre primeiro. Quando quiser, confirme o assunto — o restante é opcional.</p>
+        <p className="mt-1 text-sm text-text-tertiary">Registre primeiro. Quando quiser, confirme o assunto.</p>
       </div>
 
       {items.length === 0 ? (

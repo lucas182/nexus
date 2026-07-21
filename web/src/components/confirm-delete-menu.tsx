@@ -34,7 +34,6 @@ export function ConfirmDeleteMenu({
   align?: "left" | "right";
 }) {
   const [open, setOpen] = useState(false);
-  const [confirming, setConfirming] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ export function ConfirmDeleteMenu({
     function onClickOutside(e: MouseEvent) {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
         setOpen(false);
-        setConfirming(false);
       }
     }
     document.addEventListener("mousedown", onClickOutside);
@@ -69,9 +67,9 @@ export function ConfirmDeleteMenu({
             align === "right" ? "right-0" : "left-0"
           }`}
         >
-          {confirming ? (
-            <div className="flex flex-col gap-2 p-1.5">
-              <p className="text-xs leading-relaxed text-text-secondary">{confirmMessage}</p>
+          <div className="flex flex-col gap-2 p-1.5">
+            <p className="text-xs leading-relaxed text-text-secondary">{confirmMessage}</p>
+            <div className="flex gap-2">
               <form action={action}>
                 {Object.entries(hiddenFields).map(([name, value]) => (
                   <input key={name} type="hidden" name={name} value={value} />
@@ -80,22 +78,13 @@ export function ConfirmDeleteMenu({
               </form>
               <button
                 type="button"
-                onClick={() => setConfirming(false)}
+                onClick={() => setOpen(false)}
                 className="text-[11px] text-text-tertiary transition-colors hover:text-text-primary"
               >
                 Cancelar
               </button>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setConfirming(true)}
-              className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-[11px] text-text-secondary transition-colors hover:bg-red-soft hover:text-red"
-            >
-              <Trash2 size={12} strokeWidth={1.5} />
-              {menuItemLabel}
-            </button>
-          )}
+          </div>
         </div>
       )}
     </div>

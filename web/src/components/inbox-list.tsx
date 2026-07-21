@@ -28,18 +28,18 @@ export function InboxList({ items, workspaces, threads }: { items: InboxItem[]; 
       {selected.size > 0 && (
         <form action={classifyInboxItems} className="sticky top-2 z-10 mb-3 rounded-lg border border-accent-muted bg-surface p-3 shadow-sm">
           {[...selected].map((id) => <input key={id} type="hidden" name="inbox_item_ids" value={id} />)}
-          <p className="mb-2 text-[11px] font-medium text-text-primary">Resolver capturas selecionadas</p>
+          <p className="mb-2 text-[11px] font-medium text-text-primary">{selected.size} capturas selecionadas</p>
           <div className="flex flex-wrap gap-2">
             <select name="workspace_id" value={workspaceId}
               onChange={(e) => { setWorkspaceId(e.target.value); setThreadId(""); setNewThreadTitle(""); }}
-              className="h-8 rounded-md border border-border bg-surface px-2 text-xs text-text-secondary outline-none focus:border-accent">
-              <option value="">Área da vida</option>
+              className="h-7 rounded-md border border-border bg-surface px-2 text-[11px] text-text-secondary outline-none focus:border-accent">
+              <option value="">Área</option>
               {workspaces.map((w) => <option key={w.id} value={w.id}>{w.name}</option>)}
             </select>
             <select name="thread_id" value={threadId}
               onChange={(e) => { setThreadId(e.target.value); setNewThreadTitle(""); }}
-              className="h-8 rounded-md border border-border bg-surface px-2 text-xs text-text-secondary outline-none focus:border-accent">
-              <option value="">Escolher assunto</option>
+              className="h-7 rounded-md border border-border bg-surface px-2 text-[11px] text-text-secondary outline-none focus:border-accent">
+              <option value="">Assunto</option>
               {threadsForWorkspace.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
             </select>
           </div>
@@ -47,13 +47,13 @@ export function InboxList({ items, workspaces, threads }: { items: InboxItem[]; 
             <input name="new_thread_title" value={newThreadTitle}
               onChange={(e) => setNewThreadTitle(e.target.value)}
               placeholder="ou criar novo assunto…"
-              className="mt-2 h-8 w-full rounded-md border border-border bg-surface px-2.5 text-xs outline-none placeholder:text-text-tertiary focus:border-accent" />
+              className="mt-1.5 h-7 w-full rounded-md border border-border bg-surface px-2 text-[11px] outline-none placeholder:text-text-tertiary focus:border-accent" />
           )}
-          <div className="mt-3 flex justify-end gap-2">
+          <div className="mt-2.5 flex justify-end gap-2">
             <button type="button" onClick={() => setSelected(new Set())}
-              className="h-7 rounded-md px-3 text-[11px] text-text-secondary transition-colors hover:bg-hover">Cancelar</button>
+              className="h-7 rounded-md px-2.5 text-[11px] text-text-secondary transition-colors hover:bg-hover">Cancelar</button>
             <button disabled={!canResolve} type="submit"
-              className="h-7 rounded-md bg-accent px-3 text-[11px] font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none">Salvar</button>
+              className="h-7 rounded-md bg-accent px-2.5 text-[11px] font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none">Resolver</button>
           </div>
         </form>
       )}

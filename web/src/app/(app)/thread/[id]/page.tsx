@@ -43,31 +43,26 @@ export default async function ThreadPage({
     <div className="mx-auto max-w-2xl">
       {created === "1" && <CreatedToast label={`Assunto "${thread.title}" criado`} />}
 
-      {/* Breadcrumb */}
-      <div className="mb-6 flex items-center gap-1.5 text-xs text-text-tertiary">
-        <Link href="/" className="hover:text-text-secondary transition-colors">
-          Radar
+      {/* Title + workspace context */}
+      <div className="mb-6">
+        <Link
+          href={`/workspace/${workspace.id}`}
+          className="inline-flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary mb-2"
+        >
+          ← {workspace.name}
         </Link>
-        <span className="text-text-tertiary/50">/</span>
-        <Link href={`/workspace/${workspace.id}`} className="hover:text-text-secondary transition-colors">
-          {workspace.name}
-        </Link>
-        <span className="text-text-tertiary/50">/</span>
-        <span className="text-text-secondary">{thread.title}</span>
-      </div>
-
-      {/* Title + actions */}
-      <div className="group mb-6 flex items-start justify-between gap-3">
-        <h1 className="text-[1.6rem] font-semibold leading-tight tracking-tight text-text-primary">
-          {thread.title}
-        </h1>
-        <div className="mt-1.5 flex-shrink-0">
-          <ThreadRowMenu
-            threadId={thread.id}
-            workspaceId={workspace.id}
-            threadTitle={thread.title}
-            eventCount={events.length}
-          />
+        <div className="group flex items-start justify-between gap-3">
+          <h1 className="text-[1.6rem] font-semibold leading-tight tracking-tight text-text-primary">
+            {thread.title}
+          </h1>
+          <div className="mt-1.5 flex-shrink-0">
+            <ThreadRowMenu
+              threadId={thread.id}
+              workspaceId={workspace.id}
+              threadTitle={thread.title}
+              eventCount={events.length}
+            />
+          </div>
         </div>
       </div>
 

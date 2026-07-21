@@ -7,7 +7,6 @@ import { getEventsByThreadIds } from "@/lib/data/events";
 import { WorkspaceContextPanel } from "@/components/workspace-context-panel";
 import { ThreadCard } from "@/components/thread-card";
 import { NewThreadForm } from "@/components/new-thread-form";
-import { WorkspaceIcon } from "@/lib/icon-map";
 import { getStalledThreads, daysSince } from "@/lib/data/insights";
 import { InsightChip } from "@/components/insight-chip";
 import { logObservation } from "@/lib/behavior/log";
@@ -57,30 +56,20 @@ export default async function WorkspacePage({
   return (
     <div className="mx-auto max-w-2xl">
       {created === "1" && <CreatedToast label={`Workspace "${workspace.name}" criado`} />}
-      {deleted === "1" && <CreatedToast label={`Thread removida do workspace`} />}
+      {deleted === "1" && <CreatedToast label={`Thread removida`} />}
 
-      {/* Breadcrumb */}
-      <div className="mb-6 flex items-center gap-1.5 text-xs text-text-tertiary">
-        <Link href="/" className="hover:text-text-secondary transition-colors">Radar</Link>
-        <span className="text-text-tertiary/50">/</span>
-        <span className="text-text-secondary">{workspace.name}</span>
-      </div>
-
-      {/* Header */}
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
-            <WorkspaceIcon slug={workspace.icon} size={18} strokeWidth={1.5} />
-          </div>
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight text-text-primary">
-              {workspace.name}
-            </h1>
-            {workspace.description && (
-              <p className="mt-0.5 text-sm text-text-tertiary">{workspace.description}</p>
-            )}
-          </div>
-        </div>
+      {/* Back link + header */}
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs text-text-tertiary transition-colors hover:text-text-secondary mb-2"
+        >
+          ← Radar
+        </Link>
+        <h1 className="text-xl font-semibold tracking-tight text-text-primary">{workspace.name}</h1>
+        {workspace.description && (
+          <p className="mt-0.5 text-sm text-text-tertiary">{workspace.description}</p>
+        )}
       </div>
 
       {/* Context panel */}

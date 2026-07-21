@@ -48,7 +48,7 @@ export function KnowledgeConsolidator({
           className="flex items-center gap-1.5 py-2.5 text-xs font-medium text-text-tertiary transition-colors hover:text-accent"
         >
           <Sparkles size={12} strokeWidth={1.5} />
-          Consolidar em Knowledge
+          Consolidar
         </button>
       </>
     );
@@ -68,65 +68,52 @@ export function KnowledgeConsolidator({
         <input key={id} type="hidden" name="source_event_ids" value={id} />
       ))}
 
-      <p className="pt-3 text-[10px] text-text-tertiary">
-        Selecione os acontecimentos que formam esse Knowledge:
-      </p>
-      {events.map((event) => (
-        <label
-          key={event.id}
-          className="flex cursor-pointer items-start gap-2 border-b border-border-light py-2 last:border-0"
-        >
-          <input
-            type="checkbox"
-            checked={selected.has(event.id)}
-            onChange={() => toggle(event.id)}
-            className="mt-1"
-          />
-          <span className="text-sm text-text-primary">{event.description}</span>
-        </label>
-      ))}
-
-      <div className="mt-3 flex flex-col gap-2.5 rounded-lg border border-border-light bg-bg p-3.5">
-        <input
-          name="title"
-          placeholder="Título do Knowledge"
-          required
-          className="h-9 rounded-md border border-border bg-surface px-2.5 text-sm text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
-        />
-        <select
-          name="type"
-          defaultValue="consolidatedDecision"
-          className="h-9 rounded-md border border-border bg-surface px-2.5 text-sm text-text-secondary outline-none focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
-        >
-          {KNOWLEDGE_TYPES.map((t) => (
-            <option key={t} value={t}>
-              {KNOWLEDGE_TYPE_LABELS[t]}
-            </option>
+      <div className="mt-2.5 flex flex-col gap-2 rounded-lg border border-border-light bg-bg p-3">
+        <p className="text-[10px] text-text-tertiary">Selecione os eventos que formam este Knowledge:</p>
+        <div className="flex flex-wrap gap-1.5">
+          {events.map((event) => (
+            <button
+              key={event.id}
+              type="button"
+              onClick={() => toggle(event.id)}
+              className={`rounded-md px-2 py-1 text-[11px] transition-all ${
+                selected.has(event.id)
+                  ? "bg-accent text-white"
+                  : "bg-hover text-text-secondary hover:bg-active"
+              }`}
+            >
+              {event.description.slice(0, 50)}{event.description.length > 50 ? "…" : ""}
+            </button>
           ))}
-        </select>
-        <textarea
-          name="content"
-          placeholder="Conteúdo consolidado"
-          required
-          className="h-20 resize-none rounded-md border border-border bg-surface px-2.5 py-2 text-sm text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
-        />
+        </div>
+        <div className="flex flex-col gap-2 border-t border-border-light pt-2.5">
+          <input
+            name="title"
+            placeholder="Título"
+            required
+            className="h-8 rounded-md border border-border bg-surface px-2.5 text-xs text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent"
+          />
+          <textarea
+            name="content"
+            placeholder="Conteúdo consolidado"
+            required
+            className="h-14 resize-none rounded-md border border-border bg-surface px-2.5 py-2 text-xs text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent"
+          />
+        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
-            onClick={() => {
-              setSelecting(false);
-              setSelected(new Set());
-            }}
-            className="h-8 rounded-md px-3 text-xs text-text-secondary transition-colors hover:bg-hover"
+            onClick={() => { setSelecting(false); setSelected(new Set()); }}
+            className="h-7 rounded-md px-2.5 text-[11px] text-text-secondary transition-colors hover:bg-hover"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={selected.size === 0}
-            className="h-8 rounded-md bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
+            className="h-7 rounded-md bg-accent px-2.5 text-[11px] font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
           >
-            Consolidar ({selected.size})
+            Consolidar
           </button>
         </div>
       </div>
