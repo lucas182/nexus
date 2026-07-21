@@ -10,19 +10,12 @@ export interface DerivedWorkspaceContext {
   latestEventAt: string | null;
 }
 
-/** Deterministic context composition. Human corrections remain overrides; no LLM is involved. */
-export async function getDerivedWorkspaceContext(workspace: Workspace): Promise<DerivedWorkspaceContext> {
-  const supabase = await createClient();
-  const { data: threads, error: threadsError } = await supabase.from("threads").select("*").eq("workspace_id", workspace.id).order("updated_at", { ascending: false });
-  if (threadsError) throw threadsError;
-  const threadRows = (threads ?? []) as Thread[];
-  const ids = threadRows.map((thread) => thread.id);
-  let events: Event[] = [];
-  if (ids.length) {
-    const { data, error } = await supabase.from("events").select("*").in("thread_id", ids).order("timestamp", { ascending: false });
-    if (error) throw error;
-    events = (data ?? []) as Event[];
-  }
+/**
+ * Pure derivation — no I/O. `threadRows` must be ordered by updated_at desc and
+ * `events` by timestamp desc (the callers guarantee this). Human corrections on
+ * the Workspace remain overrides; no LLM is involved.
+ */
+function deriveContext(workspace: Workspace, threadRows: Thread[], events: Event[]): DerivedWorkspaceContext {
   const openThreads = threadRows.filter((thread) => ["created", "in_progress", "paused"].includes(thread.status));
   const currentThread = openThreads.find((thread) => thread.status === "in_progress") ?? openThreads[0] ?? null;
   const decision = events.find((event) => event.type === "decision");
@@ -35,6 +28,71 @@ export async function getDerivedWorkspaceContext(workspace: Workspace): Promise<
     openThreads,
     latestEventAt: events[0]?.timestamp ?? null,
   };
+}
+
+/**
+ * Deterministic context composition. Pass `prefetched` to reuse threads/events
+ * a caller has already loaded (the Workspace page does this to avoid re-querying
+ * the same rows it already rendered).
+ */
+export async function getDerivedWorkspaceContext(
+  workspace: Workspace,
+  prefetched?: { threads: Thread[]; events: Event[] },
+): Promise<DerivedWorkspaceContext> {
+  if (prefetched) return deriveContext(workspace, prefetched.threads, prefetched.events);
+
+  const supabase = await createClient();
+  const { data: threads, error: threadsError } = await supabase.from("threads").select("*").eq("workspace_id", workspace.id).order("updated_at", { ascending: false });
+  if (threadsError) throw threadsError;
+  const threadRows = (threads ?? []) as Thread[];
+  const ids = threadRows.map((thread) => thread.id);
+  let events: Event[] = [];
+  if (ids.length) {
+    const { data, error } = await supabase.from("events").select("*").in("thread_id", ids).order("timestamp", { ascending: false });
+    if (error) throw error;
+    events = (data ?? []) as Event[];
+  }
+  return deriveContext(workspace, threadRows, events);
+}
+
+/**
+ * Batched derived context for many workspaces (Radar) — two queries total
+ * instead of the previous 2×N. Threads and events are fetched once for all the
+ * user's workspaces and grouped in memory.
+ */
+export async function getDerivedContextsForWorkspaces(
+  workspaces: Workspace[],
+): Promise<Array<{ workspace: Workspace; context: DerivedWorkspaceContext }>> {
+  if (!workspaces.length) return [];
+  const supabase = await createClient();
+  const wsIds = workspaces.map((w) => w.id);
+
+  const { data: threads, error: threadsError } = await supabase
+    .from("threads")
+    .select("*")
+    .in("workspace_id", wsIds)
+    .order("updated_at", { ascending: false });
+  if (threadsError) throw threadsError;
+  const threadRows = (threads ?? []) as Thread[];
+
+  const threadIds = threadRows.map((t) => t.id);
+  let events: Event[] = [];
+  if (threadIds.length) {
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .in("thread_id", threadIds)
+      .order("timestamp", { ascending: false });
+    if (error) throw error;
+    events = (data ?? []) as Event[];
+  }
+
+  const threadWorkspace = new Map(threadRows.map((t) => [t.id, t.workspace_id]));
+  return workspaces.map((workspace) => {
+    const wsThreads = threadRows.filter((t) => t.workspace_id === workspace.id);
+    const wsEvents = events.filter((e) => threadWorkspace.get(e.thread_id) === workspace.id);
+    return { workspace, context: deriveContext(workspace, wsThreads, wsEvents) };
+  });
 }
 
 export interface ResumeContext {

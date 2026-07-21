@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, Zap, PenLine, Radar, Inbox } from "lucide-react";
 import type { SearchResult } from "@/app/api/search/route";
 
 const KIND_LABEL: Record<SearchResult["kind"], string> = {
@@ -12,10 +12,28 @@ const KIND_LABEL: Record<SearchResult["kind"], string> = {
   knowledge: "Knowledge",
 };
 
-export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+interface PaletteAction {
+  id: string;
+  label: string;
+  hint?: string;
+  icon: React.ReactNode;
+  run: () => void;
+}
+
+export function GlobalSearchModal({
+  open,
+  onClose,
+  onCaptureAction,
+  onNewThreadAction,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onCaptureAction?: () => void;
+  onNewThreadAction?: () => void;
+}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -37,12 +55,10 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
     return () => clearTimeout(id);
   }, [query]);
 
-  const displayedResults = query.trim() ? results : [];
-
   function handleClose() {
     setQuery("");
     setResults([]);
-    setSelectedIndex(-1);
+    setSelectedIndex(0);
     onClose();
   }
 
@@ -51,60 +67,115 @@ export function GlobalSearchModal({ open, onClose }: { open: boolean; onClose: (
     router.push(path);
   }
 
+  const actions: PaletteAction[] = [
+    onCaptureAction && {
+      id: "capture",
+      label: "Nova captura",
+      hint: "N",
+      icon: <Zap size={14} strokeWidth={1.5} />,
+      run: () => {
+        handleClose();
+        onCaptureAction();
+      },
+    },
+    onNewThreadAction && {
+      id: "new-thread",
+      label: "Novo assunto",
+      hint: "Shift N",
+      icon: <PenLine size={14} strokeWidth={1.5} />,
+      run: () => {
+        handleClose();
+        onNewThreadAction();
+      },
+    },
+    { id: "go-radar", label: "Ir para Radar", icon: <Radar size={14} strokeWidth={1.5} />, run: () => navigateTo("/") },
+    { id: "go-inbox", label: "Ir para Inbox", icon: <Inbox size={14} strokeWidth={1.5} />, run: () => navigateTo("/inbox") },
+  ].filter(Boolean) as PaletteAction[];
+
+  const showingActions = !query.trim();
+  const itemCount = showingActions ? actions.length : results.length;
+  const activeIndex = Math.max(0, Math.min(selectedIndex, itemCount - 1));
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-32">
-      <div className="absolute inset-0 bg-black/20" onClick={handleClose} />
-      <div className="relative flex max-h-[60vh] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-border-light bg-surface shadow-xl">
-        <div className="flex items-center gap-2 border-b border-border-light px-4 py-3">
-          <Search size={16} className="flex-shrink-0 text-text-tertiary" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
+      <div className="absolute inset-0 bg-black/10 animate-overlay-in" onClick={handleClose} />
+      <div className="relative flex max-h-[65vh] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-border-light bg-surface shadow-search">
+        {/* Input row */}
+        <div className="flex items-center gap-2.5 border-b border-border-light px-4 py-3">
+          <Search size={15} className="flex-shrink-0 text-text-tertiary" strokeWidth={1.5} />
           <input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar em acontecimentos, knowledges, threads, workspaces..."
-            className="flex-1 bg-transparent text-sm text-text-primary outline-none"
+            placeholder="Buscar ou executar uma ação..."
+            className="flex-1 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-tertiary"
             onKeyDown={(e) => {
               if (e.key === "ArrowDown") {
                 e.preventDefault();
-                setSelectedIndex((i) => Math.min(i + 1, displayedResults.length - 1));
+                setSelectedIndex((i) => Math.min(i + 1, itemCount - 1));
               } else if (e.key === "ArrowUp") {
                 e.preventDefault();
                 setSelectedIndex((i) => Math.max(i - 1, 0));
-              } else if (e.key === "Enter" && displayedResults[selectedIndex]) {
-                navigateTo(displayedResults[selectedIndex].path);
+              } else if (e.key === "Enter") {
+                if (showingActions) {
+                  actions[activeIndex]?.run();
+                } else if (results[activeIndex]) {
+                  navigateTo(results[activeIndex].path);
+                }
               } else if (e.key === "Escape") {
                 handleClose();
               }
             }}
           />
-          <kbd className="rounded border border-border bg-hover px-1.5 py-0.5 text-xs text-text-tertiary">
+          <kbd className="rounded border border-border bg-hover px-1.5 py-[1px] text-[9px] font-medium text-text-tertiary">
             Esc
           </kbd>
         </div>
 
-        <div className="overflow-y-auto">
-          {query.trim() && displayedResults.length === 0 && (
-            <p className="px-4 py-6 text-center text-sm text-text-tertiary">
-              Sem resultados para &quot;{query}&quot;
+        {/* Results / actions */}
+        <div className="overflow-y-auto py-1">
+          {showingActions ? (
+            actions.map((action, i) => (
+              <button
+                key={action.id}
+                onClick={action.run}
+                onMouseEnter={() => setSelectedIndex(i)}
+                className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-colors ${
+                  i === activeIndex ? "bg-hover" : ""
+                }`}
+              >
+                <span className="text-text-tertiary">{action.icon}</span>
+                <span className="flex-1 text-text-primary">{action.label}</span>
+                {action.hint && (
+                  <kbd className="rounded border border-border bg-hover px-1.5 py-[1px] text-[9px] font-medium text-text-tertiary">
+                    {action.hint}
+                  </kbd>
+                )}
+              </button>
+            ))
+          ) : results.length === 0 ? (
+            <p className="px-4 py-8 text-center text-sm text-text-tertiary">
+              Nada encontrado para &quot;{query}&quot;
             </p>
+          ) : (
+            results.map((r, i) => (
+              <button
+                key={`${r.kind}-${r.id}`}
+                onClick={() => navigateTo(r.path)}
+                onMouseEnter={() => setSelectedIndex(i)}
+                className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm transition-colors ${
+                  i === activeIndex ? "bg-hover" : ""
+                }`}
+              >
+                <span className="flex-1 truncate text-text-primary">{r.title}</span>
+                <span className="flex-shrink-0 text-[11px] text-text-tertiary">
+                  {r.subtitle || KIND_LABEL[r.kind]}
+                </span>
+              </button>
+            ))
           )}
-          {displayedResults.map((r, i) => (
-            <button
-              key={`${r.kind}-${r.id}`}
-              onClick={() => navigateTo(r.path)}
-              onMouseEnter={() => setSelectedIndex(i)}
-              className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm ${
-                i === selectedIndex ? "bg-hover" : ""
-              }`}
-            >
-              <span className="flex-1 truncate text-text-primary">{r.title}</span>
-              <span className="flex-shrink-0 text-xs text-text-tertiary">
-                {r.subtitle || KIND_LABEL[r.kind]}
-              </span>
-            </button>
-          ))}
         </div>
       </div>
     </div>

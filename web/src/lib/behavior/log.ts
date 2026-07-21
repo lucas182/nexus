@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getCachedUser } from "@/lib/auth";
 import type { ObservationType } from "@/types/domain";
 
 export interface LogObservationOptions {
@@ -18,12 +19,10 @@ export async function logObservation(
   opts: LogObservationOptions = {},
 ): Promise<void> {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getCachedUser();
     if (!user) return;
 
+    const supabase = await createClient();
     await supabase.from("observations").insert({
       user_id: user.id,
       type,

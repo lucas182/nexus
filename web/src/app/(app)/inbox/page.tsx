@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getInboxItems } from "@/lib/data/inbox";
 import { getWorkspaces } from "@/lib/data/workspaces";
 import { getAllThreads } from "@/lib/data/threads";
@@ -5,9 +6,34 @@ import { InboxList } from "@/components/inbox-list";
 
 export default async function InboxPage() {
   const [items, workspaces, threads] = await Promise.all([getInboxItems(), getWorkspaces(), getAllThreads()]);
-  return <div className="mx-auto max-w-2xl">
-    <h1 className="mb-1 text-2xl font-semibold tracking-tight text-text-primary">Inbox ({items.length})</h1>
-    <p className="mb-6 max-w-md text-sm text-text-tertiary">Registre primeiro. Quando quiser, confirme o assunto — o restante é opcional.</p>
-    {items.length === 0 ? <div className="rounded-lg border border-dashed border-border py-16 text-center"><div className="mb-3 text-2xl opacity-30">✓</div><div className="font-medium text-text-secondary">Inbox limpo.</div><div className="mt-1 text-xs text-text-tertiary">Nada precisa da sua atenção agora.</div></div> : <InboxList items={items} workspaces={workspaces} threads={threads} />}
-  </div>;
+  return (
+    <div className="mx-auto max-w-2xl">
+      {/* Breadcrumb */}
+      <div className="mb-6 flex items-center gap-1.5 text-xs text-text-tertiary">
+        <Link href="/" className="hover:text-text-secondary transition-colors">Radar</Link>
+        <span className="text-text-tertiary/50">/</span>
+        <span className="text-text-secondary">Inbox</span>
+      </div>
+
+      <div className="mb-6">
+        <h1 className="text-xl font-semibold tracking-tight text-text-primary">Inbox</h1>
+        <p className="mt-1 text-sm text-text-tertiary">Registre primeiro. Quando quiser, confirme o assunto — o restante é opcional.</p>
+      </div>
+
+      {items.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border py-16 text-center">
+          <div className="mb-2 text-2xl text-text-tertiary/40">✓</div>
+          <p className="font-medium text-text-secondary">Inbox limpo.</p>
+          <p className="mt-1 text-xs text-text-tertiary">Nada precisa da sua atenção agora.</p>
+        </div>
+      ) : (
+        <>
+          <p className="mb-4 text-xs text-text-tertiary">
+            {items.length} {items.length === 1 ? "captura" : "capturas"} aguardando
+          </p>
+          <InboxList items={items} workspaces={workspaces} threads={threads} />
+        </>
+      )}
+    </div>
+  );
 }

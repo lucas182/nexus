@@ -24,12 +24,12 @@ export function CreatedToast({ label }: { label: string }) {
     <div
       role="status"
       aria-live="polite"
-      className="animate-toast-in fixed left-1/2 top-5 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border-light bg-surface py-2 pl-2.5 pr-4 text-sm text-text-primary shadow-lg"
+      className="animate-toast-in fixed left-1/2 top-5 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border-light bg-surface py-1.5 pl-2 pr-3.5 text-sm text-text-primary shadow-sm"
     >
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground">
-        <Check size={12} strokeWidth={2.5} />
+      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-accent-foreground">
+        <Check size={9} strokeWidth={2.5} />
       </span>
-      {label}
+      <span className="text-xs">{label}</span>
     </div>
   );
 }

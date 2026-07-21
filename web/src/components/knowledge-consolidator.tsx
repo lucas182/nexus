@@ -5,6 +5,7 @@ import type { Event, KnowledgeType } from "@/types/domain";
 import { KNOWLEDGE_TYPE_LABELS } from "@/types/domain";
 import { EventItem } from "@/components/event-item";
 import { createKnowledge } from "@/lib/actions/knowledge";
+import { showToast } from "@/lib/toast";
 import { Sparkles } from "lucide-react";
 
 const KNOWLEDGE_TYPES = Object.keys(KNOWLEDGE_TYPE_LABELS) as KnowledgeType[];
@@ -30,7 +31,7 @@ export function KnowledgeConsolidator({
 
   if (events.length === 0) {
     return (
-      <p className="py-6 text-center text-sm text-text-tertiary">
+      <p className="py-5 text-center text-sm text-text-tertiary">
         Nenhum acontecimento registrado ainda.
       </p>
     );
@@ -44,9 +45,10 @@ export function KnowledgeConsolidator({
         ))}
         <button
           onClick={() => setSelecting(true)}
-          className="flex items-center gap-1.5 py-3 text-xs font-medium text-accent hover:underline"
+          className="flex items-center gap-1.5 py-2.5 text-xs font-medium text-text-tertiary transition-colors hover:text-accent"
         >
-          <Sparkles size={13} /> Consolidar em Knowledge
+          <Sparkles size={12} strokeWidth={1.5} />
+          Consolidar em Knowledge
         </button>
       </>
     );
@@ -58,6 +60,7 @@ export function KnowledgeConsolidator({
         await createKnowledge(formData);
         setSelecting(false);
         setSelected(new Set());
+        showToast("Knowledge consolidado");
       }}
     >
       <input type="hidden" name="thread_id" value={threadId} />
@@ -65,7 +68,7 @@ export function KnowledgeConsolidator({
         <input key={id} type="hidden" name="source_event_ids" value={id} />
       ))}
 
-      <p className="pt-3 text-xs text-text-tertiary">
+      <p className="pt-3 text-[10px] text-text-tertiary">
         Selecione os acontecimentos que formam esse Knowledge:
       </p>
       {events.map((event) => (
@@ -77,23 +80,23 @@ export function KnowledgeConsolidator({
             type="checkbox"
             checked={selected.has(event.id)}
             onChange={() => toggle(event.id)}
-            className="mt-1.5"
+            className="mt-1"
           />
           <span className="text-sm text-text-primary">{event.description}</span>
         </label>
       ))}
 
-      <div className="mt-3 flex flex-col gap-2 rounded-lg border border-border-light bg-bg p-4">
+      <div className="mt-3 flex flex-col gap-2.5 rounded-lg border border-border-light bg-bg p-3.5">
         <input
           name="title"
           placeholder="Título do Knowledge"
           required
-          className="rounded-md border border-border bg-surface px-2 py-1.5 text-sm"
+          className="h-9 rounded-md border border-border bg-surface px-2.5 text-sm text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
         />
         <select
           name="type"
           defaultValue="consolidatedDecision"
-          className="rounded-md border border-border bg-surface px-2 py-1.5 text-sm text-text-secondary"
+          className="h-9 rounded-md border border-border bg-surface px-2.5 text-sm text-text-secondary outline-none focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
         >
           {KNOWLEDGE_TYPES.map((t) => (
             <option key={t} value={t}>
@@ -105,7 +108,7 @@ export function KnowledgeConsolidator({
           name="content"
           placeholder="Conteúdo consolidado"
           required
-          className="h-20 resize-none rounded-md border border-border bg-surface px-2 py-1.5 text-sm"
+          className="h-20 resize-none rounded-md border border-border bg-surface px-2.5 py-2 text-sm text-text-primary outline-none placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
         />
         <div className="flex justify-end gap-2">
           <button
@@ -114,14 +117,14 @@ export function KnowledgeConsolidator({
               setSelecting(false);
               setSelected(new Set());
             }}
-            className="rounded-md px-3 py-1.5 text-xs text-text-secondary hover:bg-hover"
+            className="h-8 rounded-md px-3 text-xs text-text-secondary transition-colors hover:bg-hover"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={selected.size === 0}
-            className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-hover disabled:opacity-40"
+            className="h-8 rounded-md bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
           >
             Consolidar ({selected.size})
           </button>

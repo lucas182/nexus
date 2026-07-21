@@ -1,43 +1,53 @@
 import Link from "next/link";
 import type { Event, Thread } from "@/types/domain";
 import { ThreadStatusBadge } from "@/components/badges";
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
-}
+import { ThreadRowMenu } from "@/components/thread-row-menu";
 
 export function ThreadCard({
   thread,
   recentEvents,
+  eventCount,
 }: {
   thread: Thread;
   recentEvents: Event[];
+  eventCount?: number;
 }) {
+  const count = eventCount ?? recentEvents.length;
+
   return (
-    <Link
-      href={`/thread/${thread.id}`}
-      className="mb-3 block rounded-lg border border-border-light bg-surface p-4 transition-colors hover:border-border"
-    >
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-text-primary">{thread.title}</h3>
-        <ThreadStatusBadge status={thread.status} />
-      </div>
-
-      {recentEvents.length > 0 ? (
-        <div className="mt-2 flex flex-col gap-1 border-t border-border-light pt-2">
-          {recentEvents.slice(-3).map((e) => (
-            <div key={e.id} className="flex items-center justify-between text-xs">
-              <span className="truncate text-text-secondary">{e.description}</span>
-              <span className="ml-2 flex-shrink-0 text-text-tertiary">
-                {formatDate(e.timestamp)}
-              </span>
-            </div>
-          ))}
+    <div className="group relative mb-2">
+      <Link
+        href={`/thread/${thread.id}`}
+        className="block rounded-lg border border-border-light bg-surface p-3.5 transition-all hover:border-border hover:shadow-xs"
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm font-medium text-text-primary">{thread.title}</h3>
+            {recentEvents.length > 0 ? (
+              <p className="mt-1 text-xs text-text-tertiary line-clamp-1">
+                {recentEvents[recentEvents.length - 1].description}
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-text-tertiary">Sem acontecimentos</p>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {count > 0 && (
+              <span className="text-[10px] text-text-tertiary">{count} eve{count > 1 ? "ntos" : "nto"}</span>
+            )}
+            <ThreadStatusBadge status={thread.status} />
+          </div>
         </div>
-      ) : (
-        <div className="mt-2 text-xs text-text-tertiary">Sem acontecimentos registrados</div>
-      )}
+      </Link>
 
-    </Link>
+      <div className="absolute right-2 top-2.5">
+        <ThreadRowMenu
+          threadId={thread.id}
+          workspaceId={thread.workspace_id}
+          threadTitle={thread.title}
+          eventCount={count}
+        />
+      </div>
+    </div>
   );
 }

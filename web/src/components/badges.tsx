@@ -25,13 +25,19 @@ const KNOWLEDGE_TYPE_COLOR_VAR: Record<KnowledgeType, string> = {
   validatedHypothesis: "var(--type-learning)",
 };
 
+function Dot({ color }: { color: string }) {
+  return (
+    <span
+      className="h-1.5 w-1.5 rounded-full"
+      style={{ background: color }}
+    />
+  );
+}
+
 export function EventTypeBadge({ type }: { type: EventType }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-hover px-2 py-0.5 text-xs font-medium text-text-secondary">
-      <span
-        className="h-1.5 w-1.5 rounded-full"
-        style={{ background: EVENT_TYPE_COLOR_VAR[type] }}
-      />
+    <span className="inline-flex items-center gap-1.5 rounded-md bg-hover px-1.5 py-0.5 text-[10px] font-medium text-text-secondary">
+      <Dot color={EVENT_TYPE_COLOR_VAR[type]} />
       {EVENT_TYPE_LABELS[type]}
     </span>
   );
@@ -39,36 +45,31 @@ export function EventTypeBadge({ type }: { type: EventType }) {
 
 export function KnowledgeTypeBadge({ type }: { type: KnowledgeType }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent">
-      <span
-        className="h-1.5 w-1.5 rounded-full"
-        style={{ background: KNOWLEDGE_TYPE_COLOR_VAR[type] }}
-      />
+    <span className="inline-flex items-center gap-1.5 rounded-md bg-accent-soft px-1.5 py-0.5 text-[10px] font-medium text-accent">
+      <Dot color={KNOWLEDGE_TYPE_COLOR_VAR[type]} />
       {KNOWLEDGE_TYPE_LABELS[type]}
     </span>
   );
 }
 
 const STATUS_STYLE: Record<ThreadStatus, string> = {
-  created: "bg-hover text-text-secondary",
+  created: "bg-hover text-text-tertiary",
   in_progress: "bg-accent-soft text-accent",
-  paused: "bg-amber-50 text-amber-700",
-  resolved: "bg-emerald-50 text-emerald-700",
-  archived: "bg-hover text-text-tertiary",
+  paused: "bg-amber-soft text-amber",
+  resolved: "bg-green-soft text-green",
+  archived: "bg-hover text-text-tertiary/60",
 };
 
 export function ThreadStatusBadge({ status }: { status: ThreadStatus }) {
   return (
-    <span
-      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLE[status]}`}
-    >
+    <span className={`inline-flex rounded-md px-1.5 py-0.5 text-[10px] font-medium ${STATUS_STYLE[status]}`}>
       {THREAD_STATUS_LABELS[status]}
     </span>
   );
 }
 
 const IMPACT_STYLE: Record<string, string> = {
-  high: "text-red-600",
+  high: "text-red",
   medium: "text-text-secondary",
   low: "text-text-tertiary",
 };

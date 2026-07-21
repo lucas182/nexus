@@ -6,11 +6,11 @@ export function RadarSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-border-light bg-surface p-5">
-      <h2 className="mb-3 text-xs font-medium uppercase tracking-wide text-text-tertiary">
+    <div className="rounded-lg border border-border-light bg-surface p-4">
+      <h2 className="mb-3 text-[10px] font-medium uppercase tracking-widest text-text-tertiary">
         {title}
       </h2>
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className="flex flex-col gap-1.5">{children}</div>
     </div>
   );
 }

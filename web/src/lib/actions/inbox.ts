@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getCachedUser } from "@/lib/auth";
 import { suggestClassification } from "@/lib/heuristics";
 import { logObservation } from "@/lib/behavior/log";
 import type { EventType, ImpactLevel } from "@/types/domain";
@@ -80,18 +82,22 @@ async function createEventFromCapture(input: Classification) {
     .eq("status", "pending");
   if (inboxError) throw inboxError;
 
-  await logObservation("inbox_item_classified", {
-    entityId: item.id,
-    threadId,
-    workspaceId,
-  });
-  if (event) {
-    await logObservation("event_created", {
-      entityId: event.id,
+  after(() =>
+    logObservation("inbox_item_classified", {
+      entityId: item.id,
       threadId,
       workspaceId,
-      metadata: { event_type: input.eventType ?? "note", source: "capture" },
-    });
+    }),
+  );
+  if (event) {
+    after(() =>
+      logObservation("event_created", {
+        entityId: event.id,
+        threadId,
+        workspaceId,
+        metadata: { event_type: input.eventType ?? "note", source: "capture" },
+      }),
+    );
   }
 }
 
@@ -104,7 +110,7 @@ export async function captureToInbox(formData: FormData) {
   if (!rawText) return;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCachedUser();
   if (!user) return;
 
   const suggestion = contextualThreadId
@@ -123,11 +129,13 @@ export async function captureToInbox(formData: FormData) {
     .single();
   if (error) throw error;
 
-  await logObservation("capture_created", {
-    entityId: inserted.id,
-    workspaceId: suggestion.workspaceId ?? undefined,
-    threadId: suggestion.threadId ?? undefined,
-  });
+  after(() =>
+    logObservation("capture_created", {
+      entityId: inserted.id,
+      workspaceId: suggestion.workspaceId ?? undefined,
+      threadId: suggestion.threadId ?? undefined,
+    }),
+  );
 
   if (contextualThreadId) {
     await createEventFromCapture({

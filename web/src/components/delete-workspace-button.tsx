@@ -8,14 +8,13 @@ import { deleteWorkspace } from "@/lib/actions/workspaces";
 
 function ConfirmButton() {
   const { pending } = useFormStatus();
-
   return (
     <button
       type="submit"
       disabled={pending}
-      className="flex items-center gap-1.5 rounded-md bg-red-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+      className="flex items-center gap-1.5 rounded-md bg-red px-2 py-1 text-[11px] font-medium text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending && <Loader2 size={12} className="animate-spin" />}
+      {pending && <Loader2 size={10} className="animate-spin" />}
       {pending ? "Excluindo…" : "Confirmar exclusão"}
     </button>
   );
@@ -32,9 +31,9 @@ export function DeleteWorkspaceButton({
 
   if (confirming) {
     return (
-      <div className="animate-field-in flex items-center gap-2 rounded-md border border-red-100 bg-red-50 py-1.5 pl-3 pr-1.5">
-        <span className="text-xs text-red-700">
-          Excluir <strong>{workspaceName}</strong> e tudo dentro dele?
+      <div className="animate-field-in flex items-center gap-2 rounded-md border border-red-border bg-red-soft py-1.5 pl-3 pr-1.5">
+        <span className="text-[11px] text-red">
+          Excluir <strong>{workspaceName}</strong>?
         </span>
         <form action={deleteWorkspace}>
           <input type="hidden" name="id" value={workspaceId} />
@@ -43,7 +42,7 @@ export function DeleteWorkspaceButton({
         <button
           type="button"
           onClick={() => setConfirming(false)}
-          className="rounded-md px-2 py-1 text-xs text-text-tertiary hover:text-text-primary"
+          className="rounded-md px-2 py-1 text-[11px] text-text-tertiary transition-colors hover:text-text-primary"
         >
           Cancelar
         </button>
@@ -56,9 +55,9 @@ export function DeleteWorkspaceButton({
       type="button"
       onClick={() => setConfirming(true)}
       title="Excluir workspace"
-      className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-red-50 hover:text-red-600"
+      className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-red-soft hover:text-red"
     >
-      <Trash2 size={15} strokeWidth={1.5} />
+      <Trash2 size={14} strokeWidth={1.5} />
     </button>
   );
 }

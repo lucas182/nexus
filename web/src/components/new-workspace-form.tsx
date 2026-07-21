@@ -14,9 +14,9 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-accent py-3 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-70"
+      className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-md bg-accent text-sm font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending && <Loader2 size={15} className="animate-spin" />}
+      {pending && <Loader2 size={14} className="animate-spin" />}
       {pending ? "Criando…" : "Criar Workspace"}
     </button>
   );
@@ -28,9 +28,10 @@ export function NewWorkspaceForm() {
 
   return (
     <form action={createWorkspace} className="flex flex-col gap-6">
+      {/* Name + Icon preview */}
       <div className="animate-field-in flex items-center gap-3">
-        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
-          <WorkspaceIcon slug={icon} size={20} strokeWidth={1.5} />
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
+          <WorkspaceIcon slug={icon} size={18} strokeWidth={1.5} />
         </div>
         <input
           name="name"
@@ -39,18 +40,21 @@ export function NewWorkspaceForm() {
           placeholder="Nome do Workspace"
           required
           autoFocus
-          className="w-full border-0 border-b border-transparent bg-transparent pb-1 text-lg font-medium text-text-primary outline-none transition-colors duration-150 placeholder:text-text-tertiary placeholder:font-normal focus:border-accent"
+          className="h-10 flex-1 border-0 border-b border-transparent bg-transparent text-base font-medium text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent"
         />
       </div>
 
+      {/* Icon picker + Description */}
       <div
-        className="animate-field-in flex flex-col gap-4 rounded-md bg-hover/60 p-4"
-        style={{ animationDelay: "60ms" }}
+        className="animate-field-in flex flex-col gap-4 rounded-lg bg-hover/60 p-4"
+        style={{ animationDelay: "50ms" }}
       >
         <div>
-          <span className="mb-2 block text-xs text-text-tertiary">Ícone</span>
+          <span className="mb-2 block text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+            Ícone
+          </span>
           <input type="hidden" name="icon" value={icon} />
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-6 gap-1.5">
             {WORKSPACE_ICONS.map(({ slug, label, Icon }) => {
               const selected = slug === icon;
               return (
@@ -60,13 +64,13 @@ export function NewWorkspaceForm() {
                   onClick={() => setIcon(slug)}
                   title={label}
                   aria-pressed={selected}
-                  className={`flex h-9 w-9 items-center justify-center rounded-md border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-muted ${
+                  className={`flex h-8 w-8 items-center justify-center rounded-md border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-muted ${
                     selected
                       ? "border-accent bg-accent-soft text-accent"
-                      : "border-border bg-surface text-text-secondary hover:bg-hover"
+                      : "border-border bg-surface text-text-tertiary hover:text-text-secondary hover:bg-hover"
                   }`}
                 >
-                  <Icon size={16} strokeWidth={1.5} />
+                  <Icon size={15} strokeWidth={1.5} />
                 </button>
               );
             })}
@@ -74,18 +78,20 @@ export function NewWorkspaceForm() {
         </div>
 
         <div>
-          <span className="mb-2 block text-xs text-text-tertiary">Descrição (opcional)</span>
+          <span className="mb-2 block text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
+            Descrição (opcional)
+          </span>
           <textarea
             name="description"
             placeholder="Ex: reformas, contas e manutenção da casa"
-            className="h-16 w-full resize-none rounded-md border border-border bg-surface px-3 py-2 text-sm text-text-primary outline-none transition-shadow focus:border-accent focus:ring-2 focus:ring-accent-muted"
+            className="h-14 w-full resize-none rounded-md border border-border bg-surface px-2.5 py-2 text-sm text-text-primary outline-none transition-all placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent-muted/50"
           />
         </div>
       </div>
 
-      <div className="animate-field-in" style={{ animationDelay: "120ms" }}>
+      <div className="animate-field-in" style={{ animationDelay: "100ms" }}>
         <SubmitButton />
-        <p className="mt-2 text-center text-xs text-text-tertiary">
+        <p className="mt-2 text-center text-[10px] text-text-tertiary">
           Você poderá editar tudo isso depois.
         </p>
       </div>

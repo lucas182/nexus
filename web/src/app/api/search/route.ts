@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logObservation } from "@/lib/behavior/log";
 
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
     })),
   ];
 
-  await logObservation("search_performed", { metadata: { query: q, result_count: results.length } });
+  after(() => logObservation("search_performed", { metadata: { query: q, result_count: results.length } }));
 
   return NextResponse.json({ results });
 }

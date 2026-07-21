@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logObservation } from "@/lib/behavior/log";
 
@@ -30,12 +31,14 @@ export async function createKnowledge(formData: FormData) {
   ]);
   if (error) throw error;
 
-  await logObservation("knowledge_consolidated", {
-    entityId: data.id,
-    threadId,
-    workspaceId: thread?.workspace_id,
-    metadata: { knowledge_type: type, source_event_count: sourceEventIds.length },
-  });
+  after(() =>
+    logObservation("knowledge_consolidated", {
+      entityId: data.id,
+      threadId,
+      workspaceId: thread?.workspace_id,
+      metadata: { knowledge_type: type, source_event_count: sourceEventIds.length },
+    }),
+  );
 
   revalidatePath(`/thread/${threadId}`);
 }
