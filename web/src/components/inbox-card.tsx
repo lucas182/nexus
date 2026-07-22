@@ -42,10 +42,12 @@ export function InboxCard({ item, workspaces, threads, selected, onSelect }: {
           {/* Suggestion: one-click accept or show selector */}
           {hasSuggestion && !showPicker ? (
             <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 rounded-md bg-accent-soft/60 px-3 py-2">
-              <span className="text-[11px] text-text-secondary">
-                → <strong>{suggestedWorkspace!.name} · {suggestedThread!.title}</strong>
-              </span>
-              <div className="flex gap-1.5">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[11px] text-text-secondary truncate">
+                  <strong>{suggestedWorkspace!.name}</strong> · {suggestedThread!.title}
+                </span>
+              </div>
+              <div className="flex gap-1.5 flex-shrink-0">
                 <form action={classifyInboxItem}>
                   <input type="hidden" name="inbox_item_id" value={item.id} />
                   <input type="hidden" name="thread_id" value={suggestedThread!.id} />

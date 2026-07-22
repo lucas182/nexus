@@ -14,6 +14,7 @@ import { logObservation } from "@/lib/behavior/log";
 import { getThreadResumeContext } from "@/lib/data/context";
 import { ResumeContextCard } from "@/components/resume-context-card";
 import { CreatedToast } from "@/components/created-toast";
+import { EmptyState } from "@/components/empty-state";
 
 export default async function ThreadPage({
   params,
@@ -106,10 +107,18 @@ export default async function ThreadPage({
           <span className="text-xs font-medium text-text-quaternary">Timeline</span>
           <span className="h-px flex-1 bg-border-light" />
         </div>
-        <div className="rounded-[7px] border border-border-light bg-surface px-3.5">
-          <KnowledgeConsolidator threadId={thread.id} events={events} />
+        
+        {events.length > 0 ? (
+          <div className="rounded-[7px] border border-border-light bg-surface px-3.5">
+            <KnowledgeConsolidator threadId={thread.id} events={events} />
+          </div>
+        ) : (
+          <EmptyState type="thread" />
+        )}
+        
+        <div className={events.length > 0 ? "mt-4" : ""}>
+          <NewEventForm threadId={thread.id} workspaceId={workspace.id} />
         </div>
-        <NewEventForm threadId={thread.id} workspaceId={workspace.id} />
       </div>
     </div>
   );

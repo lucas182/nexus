@@ -5,8 +5,52 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getCachedUser } from "@/lib/auth";
+import { getDefaultAIService } from "@/ai/ai-service";
 import type { ThreadStatus } from "@/types/domain";
+import type { Event } from "@/types/domain";
 import { logObservation } from "@/lib/behavior/log";
+
+/**
+ * Generate an AI-powered summary of a thread's events using Gemini.
+ * Updates resumo_vivo on the thread with the generated summary.
+ */
+export async function generateThreadSummary(threadId: string): Promise<{ success: boolean; summary: string }> {
+  const supabase = await createClient();
+
+  // Fetch events for this thread
+  const { data: events, error: eventsError } = await supabase
+    .from("events")
+    .select("description, type")
+    .eq("thread_id", threadId)
+    .order("timestamp", { ascending: true });
+
+  if (eventsError) throw eventsError;
+  if (!events?.length) return { success: false, summary: "" };
+
+  const ai = await getDefaultAIService();
+  if (!ai) return { success: false, summary: "GEMINI_API_KEY não configurada." };
+
+  const summary = await ai.summarizeThread(
+    (events as Pick<Event, "description" | "type">[]).map((e) => ({
+      description: e.description,
+      type: e.type,
+    })),
+  );
+
+  if (!summary) return { success: false, summary: "" };
+
+  // Save the generated summary to resumo_vivo
+  const { error: updateError } = await supabase
+    .from("threads")
+    .update({ resumo_vivo: summary })
+    .eq("id", threadId);
+
+  if (updateError) throw updateError;
+
+  revalidatePath(`/thread/${threadId}`);
+
+  return { success: true, summary };
+}
 
 export async function createThread(formData: FormData) {
   const workspaceId = String(formData.get("workspace_id"));

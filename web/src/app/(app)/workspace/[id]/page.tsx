@@ -13,6 +13,7 @@ import { logObservation } from "@/lib/behavior/log";
 import { CreatedToast } from "@/components/created-toast";
 import { getDerivedWorkspaceContext, getWorkspaceResumeContext } from "@/lib/data/context";
 import { ResumeContextCard } from "@/components/resume-context-card";
+import { EmptyState } from "@/components/empty-state";
 
 export default async function WorkspacePage({
   params,
@@ -102,9 +103,7 @@ export default async function WorkspacePage({
         </div>
         <NewThreadForm workspaceId={workspace.id} />
         {threadsWithEvents.length === 0 ? (
-          <div className="py-10 text-center">
-            <p className="text-sm text-text-quaternary">Nenhum assunto ainda.</p>
-          </div>
+          <EmptyState type="workspace" />
         ) : (
           threadsWithEvents.map(({ thread, events }, i) => (
             <div key={thread.id} className="animate-slide-up" style={{ animationDelay: `${Math.min(i, 6) * 30}ms` }}>

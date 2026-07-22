@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Inbox } from "lucide-react";
 import type { InboxItem, Thread, Workspace } from "@/types/domain";
 import { classifyInboxItems } from "@/lib/actions/inbox";
 import { InboxCard } from "@/components/inbox-card";
@@ -12,7 +13,31 @@ export function InboxList({ items, workspaces, threads }: { items: InboxItem[]; 
   const [newThreadTitle, setNewThreadTitle] = useState("");
   const threadsForWorkspace = useMemo(() => threads.filter((thread) => thread.workspace_id === workspaceId), [threads, workspaceId]);
   const canResolve = selected.size > 0 && Boolean(threadId || (workspaceId && newThreadTitle.trim()));
-  function toggle(id: string, checked: boolean) { setSelected((prev) => { const next = new Set(prev); if (checked) next.add(id); else next.delete(id); return next; }); }
+  
+  function toggle(id: string, checked: boolean) { 
+    setSelected((prev) => { const next = new Set(prev); if (checked) next.add(id); else next.delete(id); return next; }); 
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-[8px] border border-dashed border-border-light py-20 px-4 animate-fade-in mt-4 bg-surface/50">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-hover text-text-tertiary mb-4">
+          <Inbox size={24} strokeWidth={1.5} />
+        </div>
+        <h3 className="text-base font-semibold text-text-primary mb-1.5">Inbox Vazio</h3>
+        <p className="text-sm text-text-secondary text-center mb-6 max-w-[260px] leading-relaxed">
+          Capture sua primeira ideia. A mente serve para ter ideias, não para guardá-las.
+        </p>
+        <button 
+          onClick={() => window.dispatchEvent(new CustomEvent('open-capture'))}
+          className="h-9 rounded-[6px] bg-text-primary px-5 text-sm font-medium text-surface press"
+        >
+          Capturar algo agora
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       {items.length > 1 && (
